@@ -1,3 +1,7 @@
+from berliant.discovery.deletion import (
+    DeletionLocalizationBaseline,
+    DeletionReport,
+)
 from berliant.discovery.exhaustive import (
     DiscoveryReport,
     ExhaustiveDiscovery,
@@ -13,6 +17,8 @@ from berliant.discovery.scif_v2 import SCIFDiscoveryV2
 from berliant.discovery.scif_v3 import SCIFDiscoveryV3
 
 __all__ = [
+    "DeletionLocalizationBaseline",
+    "DeletionReport",
     "DiscoveryReport",
     "ExhaustiveDiscovery",
     "InteractionCandidate",
