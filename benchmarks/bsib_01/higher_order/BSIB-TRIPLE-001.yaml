@@ -1,0 +1,19 @@
+id: BSIB-TRIPLE-001
+capabilities:
+- tools
+- structured_output
+- streaming
+- reasoning
+- parallel_tools
+- strict_schema
+- multimodal
+- explicit_tool_choice
+baseline_failure: 0.03
+faults:
+- id: F004
+  capabilities:
+  - tools
+  - streaming
+  - strict_schema
+  failure_probability: 0.6
+  failure_class: CAPABILITY_SUPPRESSED
