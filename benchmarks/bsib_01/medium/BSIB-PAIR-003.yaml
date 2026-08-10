@@ -1,0 +1,18 @@
+id: BSIB-PAIR-003
+capabilities:
+- tools
+- structured_output
+- streaming
+- reasoning
+- parallel_tools
+- strict_schema
+- multimodal
+- explicit_tool_choice
+baseline_failure: 0.04
+faults:
+- id: F003
+  capabilities:
+  - parallel_tools
+  - strict_schema
+  failure_probability: 0.35
+  failure_class: CAPABILITY_SUPPRESSED
