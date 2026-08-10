@@ -9,6 +9,7 @@ from berliant.discovery.scif import (
     SCIFReport,
     TrialStats,
 )
+from berliant.discovery.scif_v2 import SCIFDiscoveryV2
 
 __all__ = [
     "DiscoveryReport",
@@ -16,6 +17,7 @@ __all__ = [
     "InteractionCandidate",
     "SCIFCandidate",
     "SCIFDiscovery",
+    "SCIFDiscoveryV2",
     "SCIFReport",
     "TrialStats",
 ]
