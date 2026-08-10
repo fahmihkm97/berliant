@@ -1,0 +1,24 @@
+id: BSIB-OVERLAP-001
+capabilities:
+- tools
+- structured_output
+- streaming
+- reasoning
+- parallel_tools
+- strict_schema
+- multimodal
+- explicit_tool_choice
+baseline_failure: 0.03
+faults:
+- id: F005
+  capabilities:
+  - tools
+  - streaming
+  failure_probability: 0.55
+  failure_class: CAPABILITY_SUPPRESSED
+- id: F006
+  capabilities:
+  - streaming
+  - strict_schema
+  failure_probability: 0.5
+  failure_class: CAPABILITY_SUPPRESSED
