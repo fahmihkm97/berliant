@@ -8,20 +8,23 @@ from berliant.bsib.scenario import FailureClass, Scenario
 @dataclass(frozen=True)
 class ExecutionResult:
     success: bool
-    failure_probability: float
     failure_class: FailureClass | None
     active_capabilities: frozenset[str]
 
 
 class Simulator:
     """
-    Synthetic capability-interaction simulator.
+    Legacy sequential synthetic simulator.
 
-    Ground-truth faults exist inside the Scenario, but discovery
-    algorithms must treat invoke() as the observable interface.
+    The simulator internally knows the ground-truth failure
+    probabilities, but invoke() exposes only observable outcomes.
     """
 
-    def __init__(self, scenario: Scenario, seed: int = 42) -> None:
+    def __init__(
+        self,
+        scenario: Scenario,
+        seed: int = 42,
+    ) -> None:
         self.scenario = scenario
         self.rng = np.random.default_rng(seed)
 
@@ -37,6 +40,7 @@ class Simulator:
             raise ValueError(f"Unknown capabilities: {sorted(unknown)}")
 
         failure_probability = self.scenario.baseline_failure
+
         failure_class = FailureClass.BASELINE_FAILURE
 
         for fault in self.scenario.faults:
@@ -47,13 +51,13 @@ class Simulator:
                 and fault.failure_probability > failure_probability
             ):
                 failure_probability = fault.failure_probability
+
                 failure_class = fault.failure_class
 
         failed = bool(self.rng.random() < failure_probability)
 
         return ExecutionResult(
             success=not failed,
-            failure_probability=failure_probability,
-            failure_class=failure_class if failed else None,
+            failure_class=(failure_class if failed else None),
             active_capabilities=active,
         )
