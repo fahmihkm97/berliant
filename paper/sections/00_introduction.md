@@ -7,9 +7,16 @@ strict schema enforcement, and explicit tool selection.
 
 These capabilities are often evaluated individually. However, system
 failures may emerge only when particular capabilities are activated
-together. Such failures are capability-interaction failures: the risk
-is associated not with one capability in isolation but with a specific
-combination of capabilities.
+together. Recent tool-augmented language-model benchmarks have
+demonstrated failures associated with unavailable tools, multi-tool
+settings, and silent tool errors
+[@trevino2025failtalms; @sun2024toolsfail]. Such studies motivate
+closer analysis of capability-rich AI systems, although they do not
+attempt the stochastic interaction-localization problem studied here.
+
+In this work, capability-interaction failures refer to failures whose
+risk is associated not with one capability in isolation but with a
+specific combination of capabilities.
 
 The discovery problem is difficult for two reasons.
 
@@ -114,6 +121,25 @@ mean simulator executions by 75.48% in the eight-capability mixed
 setting. In the scaling study, the reduction increased to 96.14% at
 twenty capabilities while exact recovery remained 100% across the
 twenty evaluated seeds.
+
+Prior research has established the foundations of combinatorial
+interaction testing and minimal failure-causing schemas
+[@kuhn2008beyond; @nie2011survey; @nie2011mfs]. Adaptive approaches
+have also been developed for characterizing failure-causing
+interactions [@zhang2011fic], while feedback-driven and multiple-fault
+methods explicitly address masking effects
+[@yilmaz2014masking; @niu2020multiple]. Statistical and probabilistic
+fault-localization approaches further demonstrate that uncertainty
+over candidate interaction causes is not unique to the present work
+[@wang2019pfs; @ji2023bayesflo; @nishiura2024frog].
+
+Accordingly, SCIF is not positioned as the first adaptive,
+higher-order, masking-aware, or probabilistic fault-localization
+method. The narrower contribution evaluated here is the use of
+**residual stochastic risk as an escalation signal**: interactions
+already supported by the data are suppressed, the remaining
+configuration is repeatedly executed, and higher-order localization is
+invoked only when substantial unexplained risk remains.
 
 The contributions of this work are therefore:
 
