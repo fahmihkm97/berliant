@@ -1091,8 +1091,15 @@ All Python development commands are executed through the project's
 
 ## 1. RQ1 — Holdout Discovery Accuracy
 
+![SCIF V4 exact recovery on the 1,000-seed unseen holdout.](../results/paper/figures/figure_5_holdout_recovery.png)
+
+*Figure 1. SCIF v0.0.4 exact recovery across the seven 1,000-seed unseen holdout scenarios.*
+
+
 SCIF v0.0.4 achieved near-perfect exact recovery across the unseen
 1,000-seed holdout evaluation.
+
+**Table 1. Holdout exact recovery and execution cost.**
 
 | Scenario | Exact Recovery | False-Positive Runs | Mean Executions |
 |---|---:|---:|---:|
@@ -1161,9 +1168,20 @@ holdout failure.
 
 ## 3. RQ2 — Comparison with Discovery Baselines
 
+![Exact interaction recovery by discovery method.](../results/paper/figures/figure_1_recovery_comparison.png)
+
+*Figure 2. Exact recovery of SCIF V3, deletion localization, exhaustive discovery, and SCIF V4.*
+
+![Simulator execution cost by discovery method.](../results/paper/figures/figure_2_execution_comparison.png)
+
+*Figure 3. Mean simulator executions required by each discovery method.*
+
+
 The method-comparison experiment shows that no evaluated baseline
 provided the same behavior across all four representative interaction
 structures.
+
+**Table 2. Method comparison over 100 seeds per scenario.**
 
 | Scenario | Method | Recovery | Mean Executions |
 |---|---|---:|---:|
@@ -1232,6 +1250,8 @@ representing a reduction of approximately 75.48%.
 
 The ablation experiment isolates the contribution of the two new
 higher-order stages.
+
+**Table 3. Ablation of residual-risk detection and localization.**
 
 | Scenario | V3 Pairwise Only | V3 + Residual | Full V4 |
 |---|---:|---:|---:|
@@ -1308,12 +1328,23 @@ The frozen value of 0.10 was retained.
 
 ## 6. RQ5 — Scaling Behavior
 
+![SCIF V4 execution scaling compared with exhaustive order-three search.](../results/paper/figures/figure_3_scaling.png)
+
+*Figure 4. Simulator execution scaling from 8 to 20 capabilities.*
+
+![Execution reduction relative to exhaustive discovery.](../results/paper/figures/figure_4_scaling_reduction.png)
+
+*Figure 5. Relative execution reduction of SCIF V4 compared with exhaustive order-three discovery.*
+
+
 SCIF v0.0.4 obtained 20/20 exact recoveries for every tested
 capability count in the scaling experiment. Because each capability
 count used only twenty seeds, the 95% Wilson interval associated with
 20/20 recovery is approximately 83.89% to 100%. The scaling recovery
 results should therefore be interpreted as initial robustness evidence
 rather than as precise estimates of the underlying recovery probability.
+
+**Table 4. Scaling of recovery and simulator execution cost.**
 
 | Capabilities | Exact Recovery | Mean SCIF V4 Executions | Exhaustive Executions | Reduction |
 |---:|---:|---:|---:|---:|
