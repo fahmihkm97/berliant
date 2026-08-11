@@ -37,10 +37,12 @@ order-three discovery, a 75.48% reduction.
 Ablation experiments show that residual-risk detection correctly
 identifies when higher-order escalation is required, while residual
 localization is necessary to recover the exact higher-order
-interaction. In scaling experiments from eight to twenty
-capabilities, exact recovery remained 100% over the evaluated seeds
+interaction. In scaling experiments from eight to twenty capabilities,
+SCIF achieved 20/20 exact recoveries at each tested capability count,
 while execution reduction relative to exhaustive order-three search
-increased from 75.48% to 96.14%.
+increased from 75.48% to 96.14%. Because these scaling conditions used
+twenty seeds each, they are interpreted primarily as evidence of
+execution-cost trends and initial robustness.
 
 These results indicate that residual-risk-guided escalation can
 substantially reduce stochastic interaction-discovery cost while
@@ -1112,6 +1114,19 @@ Across all seven scenarios, SCIF v0.0.4 obtained
 
 exact recovery.
 
+The corresponding 95% Wilson score interval was approximately
+
+\[
+99.9191\%
+\text{ to }
+99.9975\%.
+\]
+
+For scenarios with 1000/1000 observed exact recovery, the corresponding
+95% Wilson interval was approximately 99.6173% to 100%. Thus, observed
+100% recovery is not interpreted as evidence that the underlying error
+probability is exactly zero.
+
 No false interaction candidate was observed in the 7,000 holdout runs.
 
 The result indicates that the method preserved strong recovery across
@@ -1293,8 +1308,12 @@ The frozen value of 0.10 was retained.
 
 ## 6. RQ5 — Scaling Behavior
 
-SCIF v0.0.4 retained 100% exact recovery for every tested capability
-count in the scaling experiment.
+SCIF v0.0.4 obtained 20/20 exact recoveries for every tested
+capability count in the scaling experiment. Because each capability
+count used only twenty seeds, the 95% Wilson interval associated with
+20/20 recovery is approximately 83.89% to 100%. The scaling recovery
+results should therefore be interpreted as initial robustness evidence
+rather than as precise estimates of the underlying recovery probability.
 
 | Capabilities | Exact Recovery | Mean SCIF V4 Executions | Exhaustive Executions | Reduction |
 |---:|---:|---:|---:|---:|
@@ -1355,9 +1374,12 @@ converted that evidence into exact higher-order recovery.
 sensitivity range. A removal threshold of 0.05 was shown to be too
 permissive to stochastic removal noise.
 
-**RQ5:** Exact recovery remained 100% from 8 through 20 capabilities,
-while execution reduction relative to exhaustive order-three search
-increased from 75.48% to 96.14%.
+**RQ5:** SCIF obtained 20/20 exact recoveries at each tested
+capability count from 8 through 20 capabilities, while execution
+reduction relative to exhaustive order-three search increased from
+75.48% to 96.14%. Because the scaling study uses only twenty seeds per
+size, these recovery results have wider statistical uncertainty than
+the main holdout evaluation.
 
 ---
 

@@ -31,10 +31,12 @@ order-three discovery, a 75.48% reduction.
 Ablation experiments show that residual-risk detection correctly
 identifies when higher-order escalation is required, while residual
 localization is necessary to recover the exact higher-order
-interaction. In scaling experiments from eight to twenty
-capabilities, exact recovery remained 100% over the evaluated seeds
+interaction. In scaling experiments from eight to twenty capabilities,
+SCIF achieved 20/20 exact recoveries at each tested capability count,
 while execution reduction relative to exhaustive order-three search
-increased from 75.48% to 96.14%.
+increased from 75.48% to 96.14%. Because these scaling conditions used
+twenty seeds each, they are interpreted primarily as evidence of
+execution-cost trends and initial robustness.
 
 These results indicate that residual-risk-guided escalation can
 substantially reduce stochastic interaction-discovery cost while
