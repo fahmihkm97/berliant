@@ -3,9 +3,7 @@ name = "berliant"
 version = "0.1.0"
 description = "Stochastic capability-interaction discovery for failure-inducing capability combinations"
 readme = "README.md"
-authors = [
-    { name = "fahmihkm97", email = "fahmihakim1803@gmail.com" }
-]
+authors = [{ name = "fahmihkm97" }]
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=2.2.6",
