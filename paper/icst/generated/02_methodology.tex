@@ -1,0 +1,259 @@
+\section{Methodology}
+
+\subsection{Problem Formulation}
+
+Let
+
+\[
+K = \{k_1, k_2, \ldots, k_n\}
+\]
+
+denote the set of capabilities available to a system.
+
+A capability configuration is a subset
+
+\[
+C \subseteq K.
+\]
+
+Executing configuration \(C\) produces a stochastic binary outcome
+
+\[
+Y(C) \in \{0,1\},
+\]
+
+where \(Y(C)=1\) denotes a failure.
+
+Each configuration therefore has an unknown failure probability
+
+\[
+p(C)=P(Y(C)=1).
+\]
+
+The discovery problem is to identify minimal subsets of capabilities whose joint activation causes a substantial increase in failure risk, while minimizing the total number of stochastic executions required.
+
+\subsection{Stochastic Capability Interactions}
+
+A capability interaction is not defined only by a high absolute failure probability.
+
+A candidate set must also exhibit risk beyond that observed in its relevant lower-order subsets.
+
+For a candidate interaction \(C\), SCIF uses a joint-risk increment concept of the form
+
+\[
+JRI(C)
+=
+\hat{p}(C)
+-
+\max_{S \subset C}
+\hat{p}(S),
+\]
+
+where \(\hat{p}\) denotes an empirical failure-rate estimate.
+
+A candidate is therefore supported when its joint failure rate is sufficiently large and its observed risk cannot be explained by a lower-order subset.
+
+\subsection{BSIB Benchmark Model}
+
+The Benchmark for Stochastic Interaction Bugs (BSIB) provides synthetic capability configurations with hidden interaction faults.
+
+The simulator exposes only stochastic execution outcomes to the discovery algorithm.
+
+The underlying true failure probability is not included in the execution result.
+
+This prevents the discovery algorithm from directly accessing the benchmark ground truth.
+
+\subsection{Keyed Stochastic Simulation}
+
+Experiments use deterministic keyed random streams.
+
+For a fixed benchmark configuration and experiment seed, the random outcome stream is stable even when configurations are evaluated in a different order.
+
+This design prevents algorithmic execution order from unintentionally changing the stochastic evidence observed for the same configuration.
+
+The keyed simulator therefore supports reproducible and fair comparisons among discovery methods.
+
+\subsection{Pairwise Discovery}
+
+SCIF v0.0.4 begins with the SCIF v0.0.3 pairwise discovery procedure.
+
+The frozen evaluation configuration uses:
+
+\begin{itemize}
+\tightlist
+\item
+  100 initial screening trials;
+\item
+  300 screening-retest trials;
+\item
+  1,500 confirmation trials;
+\item
+  1,000 subset-confirmation trials;
+\item
+  minimum joint failure rate of 0.15;
+\item
+  minimum joint-risk increment of 0.10; and
+\item
+  confidence threshold of 0.95.
+\end{itemize}
+
+Initial sampling provides a low-cost estimate of the failure signal.
+
+Pairs with sufficiently convincing evidence proceed to confirmation.
+
+Borderline configurations may receive additional screening trials before a final decision is made.
+
+This architecture concentrates stochastic executions on configurations that show evidence of interaction risk.
+
+\subsection{Limitation of Pairwise-Only Discovery}
+
+A pure higher-order interaction can remain invisible to every lower-order subset.
+
+For example, consider a three-way interaction involving capabilities
+
+\[
+\{a,b,c\}.
+\]
+
+It is possible for
+
+\[
+p(\{a,b\}),
+p(\{a,c\}),
+p(\{b,c\})
+\]
+
+to remain near baseline while
+
+\[
+p(\{a,b,c\})
+\]
+
+is substantially elevated.
+
+A pairwise-only algorithm therefore cannot represent or recover this type of fault.
+
+This limitation motivates the higher-order stages of SCIF v0.0.4.
+
+\subsection{Known-Pair Suppression}
+
+After pairwise discovery, SCIF v0.0.4 constructs probe configurations intended to disable already-discovered pairwise interactions.
+
+For the set of discovered pairwise interactions, the algorithm computes minimal capability-removal sets that intersect every known pair.
+
+Removing such a set creates a configuration in which the discovered pairwise interactions are suppressed.
+
+Multiple minimal removal sets may exist.
+
+SCIF evaluates the resulting residual configurations rather than assuming that one particular suppression is sufficient.
+
+\subsection{Residual-Risk Detection}
+
+Let \(C_r\) denote a configuration after suppression of known pairwise interactions.
+
+SCIF estimates
+
+\[
+\hat{p}(C_r)
+\]
+
+and compares the remaining failure signal with the estimated baseline.
+
+Higher-order escalation is triggered only when residual failure risk remains sufficiently large.
+
+The frozen parameters are:
+
+\begin{itemize}
+\tightlist
+\item
+  1,000 residual trials;
+\item
+  minimum residual failure rate of 0.15; and
+\item
+  minimum residual-risk increment of 0.10.
+\end{itemize}
+
+Conceptually, the residual stage asks:
+
+\begin{quote}
+After explaining and suppressing the interactions already found, does substantial unexplained risk remain?
+\end{quote}
+
+If the answer is no, SCIF terminates without invoking higher-order localization.
+
+If the answer is yes, the residual configuration becomes the input to the higher-order localizer.
+
+\subsection{Residual Higher-Order Localization}
+
+Higher-order localization is applied only after residual-risk detection has justified escalation.
+
+For each capability in the selected residual configuration, SCIF measures the failure rate after removing that capability.
+
+Let \(C_r\) be the source configuration and let \(k \in C_r\).
+
+The empirical removal drop is
+
+\[
+D(k)
+=
+\hat{p}(C_r)
+-
+\hat{p}(C_r \setminus \{k\}).
+\]
+
+Capabilities whose removal causes a sufficiently large decrease in failure risk are treated as candidate members of the hidden interaction.
+
+The frozen localization configuration uses:
+
+\begin{itemize}
+\tightlist
+\item
+  1,000 trials per configuration;
+\item
+  minimum failure rate of 0.15;
+\item
+  minimum removal drop of 0.10; and
+\item
+  minimum higher-order candidate size of three.
+\end{itemize}
+
+\subsection{Minimality Confirmation}
+
+Removal evidence alone is not sufficient.
+
+The resulting candidate is evaluated directly, and its immediate subsets are also tested.
+
+The purpose is to verify that the candidate itself retains elevated failure risk while dropping one of its essential members removes the interaction signal.
+
+This step protects against reporting unnecessarily large interaction sets.
+
+\subsection{Complete SCIF v0.0.4 Pipeline}
+
+The final procedure is:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  perform adaptive pairwise discovery;
+\item
+  record confirmed pairwise interactions;
+\item
+  construct minimal suppression sets for the known pairs;
+\item
+  evaluate residual-risk probes;
+\item
+  stop when no substantial residual risk remains;
+\item
+  otherwise select a residual configuration;
+\item
+  apply deletion-style higher-order localization;
+\item
+  confirm candidate minimality; and
+\item
+  return pairwise and higher-order discoveries in a unified report.
+\end{enumerate}
+
+The higher-order stage is therefore conditional rather than mandatory.
+
+This design preserves the efficiency of pairwise discovery on simple scenarios while providing an escalation path for unexplained higher-order risk.

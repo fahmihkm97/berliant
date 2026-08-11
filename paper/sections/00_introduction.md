@@ -30,7 +30,7 @@ combinatorially. For \(n\) capabilities, exhaustive testing through
 interaction order three requires
 
 \[
-1+n+{n \choose 2}+{n \choose 3}
+1+n+\binom{n}{2}+\binom{n}{3}
 \]
 
 distinct configurations before repeated stochastic trials are taken
@@ -81,16 +81,7 @@ configuration.
 
 This produces the pipeline:
 
-\[
-\text{pairwise discovery}
-\rightarrow
-\text{known-pair suppression}
-\rightarrow
-\text{residual-risk detection}
-\rightarrow
-\text{conditional higher-order localization}.
-\]
-
+**pairwise discovery** $ightarrow$ **known-pair suppression** $ightarrow$ **residual-risk detection** $ightarrow$ **conditional higher-order localization**.
 The method is evaluated using the Benchmark for Stochastic Interaction
 Bugs (BSIB), a synthetic benchmark family designed to provide hidden
 ground-truth capability interactions while exposing only stochastic

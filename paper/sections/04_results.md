@@ -1,6 +1,6 @@
 # Results
 
-## 1. RQ1 — Holdout Discovery Accuracy
+## RQ1 — Holdout Discovery Accuracy
 
 SCIF v0.0.4 achieved near-perfect exact recovery across the unseen
 1,000-seed holdout evaluation.
@@ -15,66 +15,37 @@ SCIF v0.0.4 achieved near-perfect exact recovery across the unseen
 | TRIPLE | 1000/1000 (100.0%) | 0/1000 | 17,712.3 |
 | MIXED | 1000/1000 (100.0%) | 0/1000 | 22,803.2 |
 
-Across all seven scenarios, SCIF v0.0.4 obtained
+Across all seven scenarios, SCIF obtained
 
 \[
-6999 / 7000
-=
-99.9857\%
+6999 / 7000 = 99.9857\%
 \]
 
-exact recovery.
-
-The corresponding 95% Wilson score interval was approximately
-
-\[
-99.9191\%
-\text{ to }
-99.9975\%.
-\]
-
-For scenarios with 1000/1000 observed exact recovery, the corresponding
-95% Wilson interval was approximately 99.6173% to 100%. Thus, observed
-100% recovery is not interpreted as evidence that the underlying error
-probability is exactly zero.
+exact recovery, with a 95% Wilson interval of approximately
+99.9191%--99.9975%. For scenarios with 1000/1000 observed recovery,
+the corresponding interval is approximately 99.6173%--100%;
+observed perfect recovery is therefore not interpreted as zero
+underlying failure probability.
 
 No false interaction candidate was observed in the 7,000 holdout runs.
 
-The result indicates that the method preserved strong recovery across
-null, pairwise, overlapping-pair, pure-triple, and mixed-order
-settings.
+## Rare PAIR-002 Holdout Miss
 
-## 2. Rare PAIR-002 Holdout Miss
+The only exact-recovery miss occurred on `PAIR-002` at seed 31269.
+During the initial 100-trial screen, both the target pair and baseline
+produced 10 failures, yielding an observed joint-risk increment of
+0.000. The weak pair was therefore not promoted.
 
-The only exact-recovery miss occurred in `PAIR-002` at seed 31269.
+The residual stage later observed a failure rate of 0.242 and detected
+unexplained risk, but higher-order localization correctly declined to
+report an unsupported interaction. The run was consequently a false
+negative rather than a false-positive discovery. Parameters were not
+changed after observing this holdout result.
 
-During the initial 100-trial screening stage, the observations were:
+## RQ2 — Comparison with Discovery Baselines
 
-- target-pair failures: 10/100;
-- target-pair failure rate: 0.100;
-- baseline failure rate: 0.100; and
-- observed joint-risk increment: 0.000.
-
-The true weak pair therefore appeared indistinguishable from baseline
-in this particular initial stochastic sample and was not promoted for
-additional pairwise evaluation.
-
-The residual stage subsequently observed a residual failure rate of
-0.242 and correctly recognized unexplained risk.
-
-However, higher-order localization did not report a false interaction.
-
-The final run therefore represented a false negative for the weak
-pair, not a false interaction discovery.
-
-The parameters were deliberately left unchanged after observing this
-holdout failure.
-
-## 3. RQ2 — Comparison with Discovery Baselines
-
-The method-comparison experiment shows that no evaluated baseline
-provided the same behavior across all four representative interaction
-structures.
+The 100-seed comparison demonstrates that the evaluated methods differ
+substantially across interaction structures.
 
 | Scenario | Method | Recovery | Mean Executions |
 |---|---|---:|---:|
@@ -95,54 +66,21 @@ structures.
 | MIXED | Exhaustive | 100% | 93,000 |
 | MIXED | SCIF V4 | 100% | 22,800 |
 
-### Pairwise scenario
+V3 and V4 both recovered the tested pairwise and overlapping-pair
+structures, although V4 incurred additional residual-verification
+cost. V3 could not recover the pure triple because its proper pairwise
+subsets remained near baseline. Deletion recovered the isolated
+TRIPLE but failed on OVERLAP and MIXED.
 
-On PAIR-002, both SCIF V3 and V4 reached 100% recovery.
+SCIF V4 achieved 100% recovery on all four representative scenarios.
+For TRIPLE it used 17,700 mean executions versus 93,000 for exhaustive
+order-three discovery, a reduction of approximately 80.97%. For MIXED,
+V4 used 22,800 executions versus 93,000, a reduction of 75.48%.
 
-V3 required fewer executions because it terminates after pairwise
-discovery, whereas V4 additionally performs residual-risk verification.
+## RQ3 — Ablation of Residual-Risk Reasoning
 
-### Overlapping pairwise interactions
-
-SCIF V3 and V4 both recovered the two overlapping pairs in every run.
-
-Deletion localization failed because the benchmark does not contain a
-single dominant interaction that can be isolated through the removal
-criterion used by that baseline.
-
-### Pure triple
-
-Pairwise SCIF recovered none of the pure triple interactions because
-the proper pairwise subsets remained near baseline.
-
-Deletion recovered the isolated triple in all 100 runs.
-
-SCIF V4 also achieved 100% exact recovery while requiring a mean of
-17,700 executions compared with 93,000 for exhaustive order-three
-discovery.
-
-This corresponds to an execution reduction of approximately 80.97%.
-
-### Mixed-order interaction
-
-The MIXED benchmark produced the clearest architectural distinction.
-
-SCIF V3 recovered the pairwise interaction but could not represent the
-hidden triple, resulting in 0% exact recovery.
-
-Deletion localization also produced 0% exact recovery because the
-pairwise interaction masked removal evidence from the higher-order
-fault.
-
-Exhaustive discovery obtained 100% recovery at 93,000 executions.
-
-SCIF V4 obtained the same exact recovery with 22,800 mean executions,
-representing a reduction of approximately 75.48%.
-
-## 4. RQ3 — Ablation of Residual-Risk Reasoning
-
-The ablation experiment isolates the contribution of the two new
-higher-order stages.
+The ablation isolates the roles of residual-risk detection and
+higher-order localization.
 
 | Scenario | V3 Pairwise Only | V3 + Residual | Full V4 |
 |---|---:|---:|---:|
@@ -152,79 +90,39 @@ higher-order stages.
 | TRIPLE | 0% | 100% correct escalation | 100% exact recovery |
 | MIXED | 0% | 100% correct escalation | 100% exact recovery |
 
-Across all 500 ablation runs:
+Across 500 ablation runs, there were no false residual escalations,
+missed residual escalations, or false higher-order candidates.
+Residual detection therefore identifies when current discoveries leave
+important risk unexplained, while localization converts that evidence
+into an exact higher-order candidate.
 
-- false residual escalations: 0;
-- missed residual escalations: 0; and
-- false higher-order candidates: 0.
+Mean executions for TRIPLE were 3,700 for V3, 4,700 for V3 plus
+residual detection, and 17,700 for full V4. For MIXED they were 7,800,
+10,800, and 22,800, respectively. Higher-order localization thus adds
+substantial cost only after escalation is triggered.
 
-The results separate two functions of the V4 extension.
+## RQ4 — Parameter Sensitivity
 
-First, residual-risk detection determines whether the currently
-discovered interactions fully explain the observed risk.
+The frozen configuration achieved 100% exact recovery across all four
+sensitivity scenarios. Changing the residual-risk increment from 0.10
+to 0.05 or 0.15 did not reduce recovery, and increasing the
+higher-order minimum removal drop from 0.10 to 0.15 also preserved
+exact recovery.
 
-Second, higher-order localization identifies the exact interaction
-responsible for unexplained residual risk.
+The important degradation occurred when the removal threshold was
+reduced to 0.05: TRIPLE recovery fell to 95/100 and MIXED to 96/100.
+Non-essential capabilities sometimes exhibited stochastic removal
+drops of approximately 0.05--0.075, entering oversized candidate sets
+that were subsequently rejected by minimality checks. The permissive
+threshold therefore increased false-negative localization rather than
+false-positive reporting. The frozen value of 0.10 was retained.
 
-For TRIPLE, mean execution counts were:
+## RQ5 — Scaling Behavior
 
-- V3 only: 3,700;
-- V3 + residual: 4,700; and
-- full V4: 17,700.
-
-For MIXED they were:
-
-- V3 only: 7,800;
-- V3 + residual: 10,800; and
-- full V4: 22,800.
-
-Higher-order localization therefore adds cost only when escalation is
-required.
-
-## 5. RQ4 — Parameter Sensitivity
-
-The default configuration achieved 100% exact recovery on all four
-sensitivity scenarios.
-
-Changing the residual-risk increment from 0.10 to either 0.05 or 0.15
-did not reduce exact recovery in this experiment.
-
-Similarly, increasing the higher-order minimum removal drop from 0.10
-to 0.15 retained 100% exact recovery.
-
-The principal sensitivity appeared when the removal threshold was
-reduced to 0.05.
-
-Under this setting:
-
-- TRIPLE exact recovery decreased to 95/100; and
-- MIXED exact recovery decreased to 96/100.
-
-Diagnostic analysis showed that non-essential capabilities sometimes
-exhibited stochastic removal drops slightly above the permissive 0.05
-threshold.
-
-Observed examples included spurious drops in approximately the
-0.05-0.075 range.
-
-These capabilities entered oversized candidate sets.
-
-The subsequent minimality checks rejected those candidates, producing
-`None` rather than a false higher-order interaction.
-
-Thus, the permissive threshold primarily increased false-negative
-localization rather than false-positive reporting.
-
-The frozen value of 0.10 was retained.
-
-## 6. RQ5 — Scaling Behavior
-
-SCIF v0.0.4 obtained 20/20 exact recoveries for every tested
-capability count in the scaling experiment. Because each capability
-count used only twenty seeds, the 95% Wilson interval associated with
-20/20 recovery is approximately 83.89% to 100%. The scaling recovery
-results should therefore be interpreted as initial robustness evidence
-rather than as precise estimates of the underlying recovery probability.
+SCIF obtained 20/20 exact recoveries for every tested capability count.
+Because only twenty seeds were used per size, the 95% Wilson interval
+for 20/20 recovery is approximately 83.89%--100%; these results are
+therefore robustness evidence rather than precise recovery estimates.
 
 | Capabilities | Exact Recovery | Mean SCIF V4 Executions | Exhaustive Executions | Reduction |
 |---:|---:|---:|---:|---:|
@@ -233,61 +131,16 @@ rather than as precise estimates of the underlying recovery probability.
 | 16 | 20/20 (100%) | 40,800 | 697,000 | 94.15% |
 | 20 | 20/20 (100%) | 52,200 | 1,351,000 | 96.14% |
 
-The execution advantage increased with the size of the capability
-space.
+From 8 to 20 capabilities, exhaustive order-three cost grew from
+93,000 to 1,351,000 executions, whereas SCIF increased from 22,800 to
+52,200. The relative reduction consequently increased from 75.48% to
+96.14%.
 
-From 8 to 20 capabilities, exhaustive order-three execution cost grew
-from 93,000 to 1,351,000 executions.
+## Wall-Clock Scaling
 
-Over the same range, SCIF v0.0.4 increased from 22,800 to 52,200 mean
-executions.
-
-The relative execution reduction consequently increased from 75.48%
-at eight capabilities to 96.14% at twenty capabilities.
-
-## 7. Wall-Clock Scaling
-
-Mean runtime in the synthetic scaling experiment was:
-
-- 0.2282 seconds at 8 capabilities;
-- 0.3179 seconds at 12 capabilities;
-- 0.5400 seconds at 16 capabilities; and
-- 2.6731 seconds at 20 capabilities.
-
-The increase between 16 and 20 capabilities is substantially larger
-than the increase in simulator execution count alone.
-
-This behavior is consistent with the current implementation's
-enumeration of minimal hitting sets during pair suppression.
-
-The result therefore identifies a computational optimization target
-for larger capability spaces even though SCIF remains substantially
-more execution-efficient than exhaustive discovery.
-
-## 8. Summary of Findings
-
-The experiments provide the following answers to the research
-questions.
-
-**RQ1:** SCIF v0.0.4 achieved 99.9857% exact recovery across 7,000
-unseen holdout runs with no observed false interaction candidates.
-
-**RQ2:** SCIF v0.0.4 matched exhaustive recovery in the representative
-100-seed comparison while substantially reducing simulator executions.
-Unlike V3 and deletion localization, it recovered the tested mixed
-pairwise-plus-triple scenario.
-
-**RQ3:** Residual-risk detection correctly identified when
-higher-order escalation was necessary, while residual localization
-converted that evidence into exact higher-order recovery.
-
-**RQ4:** The frozen parameters were stable across the tested
-sensitivity range. A removal threshold of 0.05 was shown to be too
-permissive to stochastic removal noise.
-
-**RQ5:** SCIF obtained 20/20 exact recoveries at each tested
-capability count from 8 through 20 capabilities, while execution
-reduction relative to exhaustive order-three search increased from
-75.48% to 96.14%. Because the scaling study uses only twenty seeds per
-size, these recovery results have wider statistical uncertainty than
-the main holdout evaluation.
+Mean synthetic runtime increased from 0.2282 seconds at 8 capabilities
+to 0.3179, 0.5400, and 2.6731 seconds at 12, 16, and 20 capabilities,
+respectively. The sharper increase from 16 to 20 capabilities is
+consistent with overhead from the current minimal hitting-set
+enumeration. Thus, simulator-execution savings do not imply uniformly
+low internal computational complexity.

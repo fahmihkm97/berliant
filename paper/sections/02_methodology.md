@@ -1,6 +1,6 @@
 # Methodology
 
-## 1. Problem Formulation
+## Problem Formulation
 
 Let
 
@@ -34,7 +34,7 @@ The discovery problem is to identify minimal subsets of capabilities
 whose joint activation causes a substantial increase in failure risk,
 while minimizing the total number of stochastic executions required.
 
-## 2. Stochastic Capability Interactions
+## Stochastic Capability Interactions
 
 A capability interaction is not defined only by a high absolute
 failure probability.
@@ -60,7 +60,7 @@ A candidate is therefore supported when its joint failure rate is
 sufficiently large and its observed risk cannot be explained by a
 lower-order subset.
 
-## 3. BSIB Benchmark Model
+## BSIB Benchmark Model
 
 The Benchmark for Stochastic Interaction Bugs (BSIB) provides
 synthetic capability configurations with hidden interaction faults.
@@ -74,7 +74,7 @@ execution result.
 This prevents the discovery algorithm from directly accessing the
 benchmark ground truth.
 
-## 4. Keyed Stochastic Simulation
+## Keyed Stochastic Simulation
 
 Experiments use deterministic keyed random streams.
 
@@ -88,7 +88,7 @@ changing the stochastic evidence observed for the same configuration.
 The keyed simulator therefore supports reproducible and fair
 comparisons among discovery methods.
 
-## 5. Pairwise Discovery
+## Pairwise Discovery
 
 SCIF v0.0.4 begins with the SCIF v0.0.3 pairwise discovery procedure.
 
@@ -112,7 +112,7 @@ before a final decision is made.
 This architecture concentrates stochastic executions on configurations
 that show evidence of interaction risk.
 
-## 6. Limitation of Pairwise-Only Discovery
+## Limitation of Pairwise-Only Discovery
 
 A pure higher-order interaction can remain invisible to every
 lower-order subset.
@@ -144,7 +144,7 @@ type of fault.
 
 This limitation motivates the higher-order stages of SCIF v0.0.4.
 
-## 7. Known-Pair Suppression
+## Known-Pair Suppression
 
 After pairwise discovery, SCIF v0.0.4 constructs probe configurations
 intended to disable already-discovered pairwise interactions.
@@ -161,7 +161,7 @@ Multiple minimal removal sets may exist.
 SCIF evaluates the resulting residual configurations rather than
 assuming that one particular suppression is sufficient.
 
-## 8. Residual-Risk Detection
+## Residual-Risk Detection
 
 Let \(C_r\) denote a configuration after suppression of known pairwise
 interactions.
@@ -194,7 +194,7 @@ localization.
 If the answer is yes, the residual configuration becomes the input to
 the higher-order localizer.
 
-## 9. Residual Higher-Order Localization
+## Residual Higher-Order Localization
 
 Higher-order localization is applied only after residual-risk
 detection has justified escalation.
@@ -225,7 +225,7 @@ The frozen localization configuration uses:
 - minimum removal drop of 0.10; and
 - minimum higher-order candidate size of three.
 
-## 10. Minimality Confirmation
+## Minimality Confirmation
 
 Removal evidence alone is not sufficient.
 
@@ -239,7 +239,7 @@ interaction signal.
 This step protects against reporting unnecessarily large interaction
 sets.
 
-## 11. Complete SCIF v0.0.4 Pipeline
+## Complete SCIF v0.0.4 Pipeline
 
 The final procedure is:
 

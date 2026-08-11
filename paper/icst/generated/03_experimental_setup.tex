@@ -1,0 +1,404 @@
+\section{Experimental Setup}
+
+\subsection{Benchmark Scenarios}
+
+The primary evaluation uses seven BSIB scenarios.
+
+\subsubsection{NULL}
+
+\texttt{BSIB-NULL-001} contains no hidden interaction.
+
+It evaluates whether the method avoids reporting interactions when all configurations remain near baseline stochastic risk.
+
+\subsubsection{PAIR-001}
+
+\texttt{BSIB-PAIR-001} contains a strong pairwise interaction between:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{tools}; and
+\item
+  \texttt{structured\_output}.
+\end{itemize}
+
+\subsubsection{PAIR-002}
+
+\texttt{BSIB-PAIR-002} contains a weaker pairwise interaction between:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{tools}; and
+\item
+  \texttt{streaming}.
+\end{itemize}
+
+This scenario is specifically useful for evaluating stochastic screening robustness.
+
+\subsubsection{PAIR-003}
+
+\texttt{BSIB-PAIR-003} contains an interaction between:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{parallel\_tools}; and
+\item
+  \texttt{strict\_schema}.
+\end{itemize}
+
+It serves as an additional unseen pairwise scenario.
+
+\subsubsection{OVERLAP}
+
+\texttt{BSIB-OVERLAP-001} contains two pairwise interactions that share one capability:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{tools\ +\ streaming}; and
+\item
+  \texttt{streaming\ +\ strict\_schema}.
+\end{itemize}
+
+The scenario tests whether the discovery procedure can recover more than one overlapping pair.
+
+\subsubsection{TRIPLE}
+
+\texttt{BSIB-TRIPLE-001} contains the pure higher-order interaction:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{tools\ +\ streaming\ +\ strict\_schema}.
+\end{itemize}
+
+Its proper pairs remain near baseline.
+
+The scenario therefore provides no pairwise interaction signal for the hidden triple.
+
+\subsubsection{MIXED}
+
+\texttt{BSIB-MIXED-001} contains both:
+
+\begin{itemize}
+\tightlist
+\item
+  pair: \texttt{tools\ +\ streaming}; and
+\item
+  triple: \texttt{reasoning\ +\ strict\_schema\ +\ multimodal}.
+\end{itemize}
+
+The benchmark is designed to expose masking behavior that affects single-interaction deletion localization.
+
+\subsection{Evaluation Metrics}
+
+The principal metric is exact recovery.
+
+A run is counted as exactly recovered only when the complete set of reported interactions equals the benchmark ground truth.
+
+Additional measures include:
+
+\begin{itemize}
+\tightlist
+\item
+  pairwise recovery;
+\item
+  higher-order recovery;
+\item
+  residual-risk classification;
+\item
+  false-positive runs;
+\item
+  mean simulator executions;
+\item
+  median simulator executions;
+\item
+  minimum and maximum executions;
+\item
+  95th-percentile execution count;
+\item
+  reduction relative to exhaustive discovery; and
+\item
+  wall-clock time in the scaling experiment.
+\end{itemize}
+
+\subsection{Unseen Holdout Evaluation}
+
+The primary holdout evaluation uses 1,000 unseen seeds per benchmark scenario.
+
+The holdout seed range is:
+
+\[
+31001,\ldots,32000.
+\]
+
+Seven scenarios are evaluated, producing a total of
+
+\[
+7 \times 1000 = 7000
+\]
+
+SCIF v0.0.4 holdout runs.
+
+Parameters were not modified after observing the holdout results.
+
+This is important because one rare weak-pair miss was retained and analyzed rather than being used to retune the algorithm.
+
+\subsection{Baseline Comparison}
+
+Four discovery methods are compared:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  SCIF v0.0.3;
+\item
+  deletion-based localization;
+\item
+  exhaustive discovery; and
+\item
+  SCIF v0.0.4.
+\end{enumerate}
+
+The comparison study uses 100 seeds from:
+
+\[
+41001,\ldots,41100.
+\]
+
+The selected scenarios are:
+
+\begin{itemize}
+\tightlist
+\item
+  PAIR-002;
+\item
+  OVERLAP;
+\item
+  TRIPLE; and
+\item
+  MIXED.
+\end{itemize}
+
+For pairwise scenarios, exhaustive discovery evaluates configurations through order two.
+
+For scenarios containing a triple, exhaustive discovery evaluates configurations through order three.
+
+With eight capabilities this corresponds to:
+
+\[
+1 + 8 + \binom{8}{2}
+=
+37
+\]
+
+configurations for exhaustive order-two discovery, or 37,000 simulator executions at 1,000 trials per configuration.
+
+For exhaustive order-three discovery:
+
+\[
+1 + 8 + \binom{8}{2} + \binom{8}{3}
+=
+93
+\]
+
+configurations are evaluated, corresponding to 93,000 simulator executions.
+
+\subsection{Ablation Study}
+
+The ablation study uses 100 seeds:
+
+\[
+51001,\ldots,51100.
+\]
+
+Five representative scenarios are evaluated:
+
+\begin{itemize}
+\tightlist
+\item
+  NULL;
+\item
+  PAIR-002;
+\item
+  OVERLAP;
+\item
+  TRIPLE; and
+\item
+  MIXED.
+\end{itemize}
+
+Three algorithmic stages are compared:
+
+\subsubsection{Stage A --- V3 Pairwise Only}
+
+Only confirmed pairwise discoveries are considered.
+
+\subsubsection{Stage B --- V3 + Residual Detection}
+
+Pairwise discovery is followed by residual-risk classification.
+
+This stage determines whether higher-order escalation is needed but does not yet localize a higher-order interaction.
+
+\subsubsection{Stage C --- Full V4}
+
+The complete pipeline includes residual higher-order localization.
+
+The ablation records:
+
+\begin{itemize}
+\tightlist
+\item
+  stage success;
+\item
+  false residual escalations;
+\item
+  missed escalations;
+\item
+  false higher-order candidates; and
+\item
+  mean execution cost.
+\end{itemize}
+
+\subsection{Sensitivity Study}
+
+The sensitivity study uses 100 seeds:
+
+\[
+61001,\ldots,61100.
+\]
+
+Four scenarios are tested:
+
+\begin{itemize}
+\tightlist
+\item
+  NULL;
+\item
+  PAIR-002;
+\item
+  TRIPLE; and
+\item
+  MIXED.
+\end{itemize}
+
+The frozen baseline configuration is:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{initial\_trials\ =\ 100};
+\item
+  \texttt{min\_residual\_increment\ =\ 0.10}; and
+\item
+  \texttt{higher\_order\_min\_removal\_drop\ =\ 0.10}.
+\end{itemize}
+
+The evaluated alternatives are:
+
+\begin{itemize}
+\tightlist
+\item
+  initial trials = 50;
+\item
+  initial trials = 200;
+\item
+  residual increment = 0.05;
+\item
+  residual increment = 0.15;
+\item
+  removal drop = 0.05; and
+\item
+  removal drop = 0.15.
+\end{itemize}
+
+The purpose is robustness characterization rather than post-holdout parameter optimization.
+
+\subsection{Scaling Study}
+
+Scaling is evaluated using benchmark variants with:
+
+\begin{itemize}
+\tightlist
+\item
+  8 capabilities;
+\item
+  12 capabilities;
+\item
+  16 capabilities; and
+\item
+  20 capabilities.
+\end{itemize}
+
+Each benchmark retains:
+
+\begin{itemize}
+\tightlist
+\item
+  one pairwise interaction; and
+\item
+  one three-way interaction.
+\end{itemize}
+
+Additional capabilities are non-interacting noise capabilities.
+
+Twenty seeds are evaluated for each size:
+
+\[
+71001,\ldots,71020.
+\]
+
+For \(n\) capabilities, exhaustive order-three discovery evaluates
+
+\[
+1+n+\binom{n}{2}+\binom{n}{3}
+\]
+
+configurations.
+
+At 1,000 trials per configuration, exhaustive execution counts are:
+
+\begin{itemize}
+\tightlist
+\item
+  93,000 for 8 capabilities;
+\item
+  299,000 for 12 capabilities;
+\item
+  697,000 for 16 capabilities; and
+\item
+  1,351,000 for 20 capabilities.
+\end{itemize}
+
+\subsection{Reproducibility}
+
+The implementation is maintained in the Berliant repository.
+
+The frozen research milestone is identified by the Git tag:
+
+\texttt{scif-v0.0.4}
+
+The repository includes:
+
+\begin{itemize}
+\tightlist
+\item
+  benchmark definitions;
+\item
+  simulator implementation;
+\item
+  discovery algorithms;
+\item
+  automated tests;
+\item
+  experiment scripts;
+\item
+  aggregated result files; and
+\item
+  publication figure-generation scripts.
+\end{itemize}
+
+All Python development commands are executed through the project's \texttt{uv} environment.

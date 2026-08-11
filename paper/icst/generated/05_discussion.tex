@@ -1,0 +1,35 @@
+\section{Discussion}
+
+\subsection{Main Interpretation}
+
+SCIF's main advantage is the separation of already-explained risk from unexplained residual risk. Pairwise discovery handles interactions visible at order two, while higher-order localization is invoked only when risk remains after known pairwise interactions are suppressed. This conditional escalation trades a modest verification overhead for the ability to detect when pairwise reasoning is insufficient.
+
+\subsection{Pairwise and Higher-Order Behavior}
+
+The comparison confirms that pairwise discovery remains effective when the underlying structure is genuinely pairwise. On PAIR-002, V3 recovered all 100 comparison seeds using fewer executions than V4 because it terminates without residual verification.
+
+The TRIPLE result exposes the corresponding representational limit: its proper pairwise subsets remain near baseline, so pairwise ranking alone cannot reveal the hidden three-way interaction. SCIF V4 instead detects unexplained residual risk and escalates to higher-order localization.
+
+\subsection{Mixed-Order Masking}
+
+MIXED combines a readily discoverable pair with an independent triple. Direct deletion can remain ambiguous because removing a capability from one active interaction may leave another interaction active, preserving a high failure probability and masking removal evidence.
+
+SCIF first suppresses the known pair and then localizes within the residual configuration. In the evaluated mixed benchmark, this separation exposes the hidden triple and explains why V4 succeeds where pairwise-only and direct-deletion approaches do not.
+
+\subsection{Interpretation of the Ablation}
+
+The ablation supports distinct roles for the two added stages. Residual-risk detection correctly determined whether important risk remained unexplained in all tested TRIPLE and MIXED runs, but did not itself identify the interaction. Higher-order localization then converted that residual evidence into exact recovery. This separation avoids invoking expensive localization when pairwise discoveries already explain the observed risk.
+
+\subsection{Weak-Pair Holdout Miss}
+
+The single holdout miss, PAIR-002 seed 31269, resulted from finite stochastic sampling: the target pair and baseline both produced 10 failures in the initial 100 trials. Residual detection later identified unexplained risk, while localization declined to report an unsupported higher-order candidate. Thus, the miss remained a false negative rather than creating a false positive, and no post-holdout tuning was applied.
+
+\subsection{Sensitivity and Conservative Localization}
+
+The sensitivity study shows a noise-versus-recall trade-off in the higher-order removal threshold. Values of 0.10 and 0.15 preserved exact recovery, whereas 0.05 admitted stochastic removal drops from irrelevant capabilities and reduced TRIPLE and MIXED recovery. Minimality checks rejected the resulting oversized candidates rather than turning them into false interaction reports.
+
+\subsection{Efficiency and Implications}
+
+SCIF increasingly reduces simulator executions relative to exhaustive order-three discovery as capability count grows, reaching a 96.14\% reduction at twenty capabilities. This execution advantage should be distinguished from implementation complexity: wall-clock growth at the largest tested size indicates minimal hitting-set enumeration as an optimization target.
+
+Overall, the experiments support residual-risk-guided escalation: discover simpler interactions first, suppress what they explain, and increase search order only when substantial unexplained risk remains. The evidence is limited to the evaluated pairwise and three-way synthetic structures; broader interaction orders and production systems require separate validation.

@@ -1,0 +1,87 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cite}
+\usepackage[hidelinks]{hyperref}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}%
+  \setlength{\parskip}{0pt}%
+}
+
+\title{
+Residual-Risk-Guided Discovery of
+Stochastic Mixed-Order Capability Interactions
+}
+
+\author{
+\IEEEauthorblockN{Anonymous Author(s)}
+\IEEEauthorblockA{Anonymous Submission}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{generated/08_abstract.tex}
+\end{abstract}
+
+\input{generated/00_introduction.tex}
+
+\input{generated/01a_related_work.tex}
+
+\input{generated/01_research_questions.tex}
+
+\input{generated/02_methodology.tex}
+
+\input{generated/03_experimental_setup.tex}
+
+\input{generated/04_results.tex}
+
+\begin{figure}[t]
+\centering
+\includegraphics[
+  width=0.94\columnwidth
+]{figures/figure_1_recovery_comparison.pdf}
+\caption{
+Exact interaction recovery by discovery method.
+}
+\label{fig:recovery}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[
+  width=0.94\columnwidth
+]{figures/figure_2_execution_comparison.pdf}
+\caption{
+Mean simulator executions by discovery method.
+}
+\label{fig:executions}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[
+  width=0.94\columnwidth
+]{figures/figure_3_scaling.pdf}
+\caption{
+Simulator execution scaling from 8 to 20 capabilities.
+}
+\label{fig:scaling}
+\end{figure}
+
+\input{generated/05_discussion.tex}
+
+\input{generated/06_limitations_and_threats.tex}
+
+\input{generated/07_conclusion.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

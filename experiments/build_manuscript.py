@@ -22,12 +22,12 @@ ORDER = (
 
 
 FIGURES = {
-    "## 1. RQ1 — Holdout Discovery Accuracy": """
+    "## RQ1 — Holdout Discovery Accuracy": """
 ![SCIF V4 exact recovery on the 1,000-seed unseen holdout.](../results/paper/figures/figure_5_holdout_recovery.png)
 
 *Figure 1. SCIF v0.0.4 exact recovery across the seven 1,000-seed unseen holdout scenarios.*
 """,
-    "## 3. RQ2 — Comparison with Discovery Baselines": """
+    "## RQ2 — Comparison with Discovery Baselines": """
 ![Exact interaction recovery by discovery method.](../results/paper/figures/figure_1_recovery_comparison.png)
 
 *Figure 2. Exact recovery of SCIF V3, deletion localization, exhaustive discovery, and SCIF V4.*
@@ -36,7 +36,7 @@ FIGURES = {
 
 *Figure 3. Mean simulator executions required by each discovery method.*
 """,
-    "## 6. RQ5 — Scaling Behavior": """
+    "## RQ5 — Scaling Behavior": """
 ![SCIF V4 execution scaling compared with exhaustive order-three search.](../results/paper/figures/figure_3_scaling.png)
 
 *Figure 4. Simulator execution scaling from 8 to 20 capabilities.*

@@ -1,6 +1,6 @@
 # Experimental Setup
 
-## 1. Benchmark Scenarios
+## Benchmark Scenarios
 
 The primary evaluation uses seven BSIB scenarios.
 
@@ -69,7 +69,7 @@ hidden triple.
 The benchmark is designed to expose masking behavior that affects
 single-interaction deletion localization.
 
-## 2. Evaluation Metrics
+## Evaluation Metrics
 
 The principal metric is exact recovery.
 
@@ -89,7 +89,7 @@ Additional measures include:
 - reduction relative to exhaustive discovery; and
 - wall-clock time in the scaling experiment.
 
-## 3. Unseen Holdout Evaluation
+## Unseen Holdout Evaluation
 
 The primary holdout evaluation uses 1,000 unseen seeds per benchmark
 scenario.
@@ -113,7 +113,7 @@ Parameters were not modified after observing the holdout results.
 This is important because one rare weak-pair miss was retained and
 analyzed rather than being used to retune the algorithm.
 
-## 4. Baseline Comparison
+## Baseline Comparison
 
 Four discovery methods are compared:
 
@@ -144,7 +144,7 @@ configurations through order three.
 With eight capabilities this corresponds to:
 
 \[
-1 + 8 + {8 \choose 2}
+1 + 8 + \binom{8}{2}
 =
 37
 \]
@@ -155,7 +155,7 @@ simulator executions at 1,000 trials per configuration.
 For exhaustive order-three discovery:
 
 \[
-1 + 8 + {8 \choose 2} + {8 \choose 3}
+1 + 8 + \binom{8}{2} + \binom{8}{3}
 =
 93
 \]
@@ -163,7 +163,7 @@ For exhaustive order-three discovery:
 configurations are evaluated, corresponding to 93,000 simulator
 executions.
 
-## 5. Ablation Study
+## Ablation Study
 
 The ablation study uses 100 seeds:
 
@@ -204,7 +204,7 @@ The ablation records:
 - false higher-order candidates; and
 - mean execution cost.
 
-## 6. Sensitivity Study
+## Sensitivity Study
 
 The sensitivity study uses 100 seeds:
 
@@ -237,7 +237,7 @@ The evaluated alternatives are:
 The purpose is robustness characterization rather than post-holdout
 parameter optimization.
 
-## 7. Scaling Study
+## Scaling Study
 
 Scaling is evaluated using benchmark variants with:
 
@@ -262,7 +262,7 @@ Twenty seeds are evaluated for each size:
 For \(n\) capabilities, exhaustive order-three discovery evaluates
 
 \[
-1+n+{n \choose 2}+{n \choose 3}
+1+n+\binom{n}{2}+\binom{n}{3}
 \]
 
 configurations.
@@ -274,7 +274,7 @@ At 1,000 trials per configuration, exhaustive execution counts are:
 - 697,000 for 16 capabilities; and
 - 1,351,000 for 20 capabilities.
 
-## 8. Reproducibility
+## Reproducibility
 
 The implementation is maintained in the Berliant repository.
 
