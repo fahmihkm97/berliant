@@ -341,9 +341,8 @@ comparisons among discovery methods.
 
 ## Pairwise Discovery
 
-SCIF v0.0.4 begins with the SCIF v0.0.3 pairwise discovery procedure.
-
-The frozen evaluation configuration uses:
+SCIF v0.0.4 begins with the SCIF v0.0.3 pairwise procedure. The frozen
+configuration uses:
 
 - 100 initial screening trials;
 - 300 screening-retest trials;
@@ -354,27 +353,19 @@ The frozen evaluation configuration uses:
 - screening posterior-probability threshold of 0.20; and
 - confirmation posterior-support threshold of 0.95.
 
-Initial screening uses relaxed empirical thresholds equal to 75% of
-the minimum joint-failure threshold and 67% of the minimum
-joint-risk-increment threshold. With the frozen parameters, these are
-0.1125 and 0.067, respectively.
+Initial screening uses relaxed empirical thresholds of 0.1125 for
+joint failure rate and 0.067 for JRI, corresponding to 75% and 67% of
+their confirmation thresholds. Pairs satisfying both proceed directly
+to confirmation. If only the joint-rate threshold is met, posterior
+support for both screening conditions is estimated; support of at
+least 0.20 extends the baseline, singleton, and pair configurations to
+300 trials before re-screening.
 
-A pair that immediately satisfies both screening thresholds proceeds
-to confirmation. If its joint rate reaches the screening threshold
-but its empirical JRI does not, SCIF estimates the posterior
-probability that both screening conditions hold. A probability of at
-least 0.20 triggers extension of the baseline, both singleton
-configurations, and the pair to 300 trials before screening is
-re-evaluated.
-
-During confirmation, the baseline and singleton subsets are extended
-to 1,000 trials and the candidate pair to 1,500 trials. Posterior
-support is estimated from 10,000 Beta posterior samples using
-Beta(f+0.5, n-f+0.5) for a configuration with f failures in n trials.
-The reported confidence is the fraction of posterior samples for which
-both the joint failure rate is at least 0.15 and the JRI is at least
-0.10. A pair is confirmed only when its empirical thresholds are also
-satisfied and this posterior support is at least 0.95.
+For confirmation, the baseline and singleton subsets are extended to
+1,000 trials and the pair to 1,500. Posterior support is estimated from
+10,000 Beta(f+0.5, n-f+0.5) samples and equals the fraction satisfying
+both joint failure rate >= 0.15 and JRI >= 0.10. Confirmation requires
+these empirical thresholds and posterior support >= 0.95.
 
 ## Limitation of Pairwise-Only Discovery
 
@@ -1087,66 +1078,58 @@ systems require separate validation.
 
 ## Synthetic and External Validity
 
-BSIB provides controlled stochastic behavior and exact hidden ground
-truth but cannot reproduce the full complexity of production AI
-systems, including state dependence, non-stationarity, continuous
-parameters, semantic failures, and environmental effects. The results
-therefore characterize behavior only within the evaluated synthetic
-setting; real-system validation remains necessary.
+BSIB provides controlled stochastic behavior and exact ground truth but
+does not capture production-system state dependence, non-stationarity,
+continuous parameters, semantic failures, or environmental effects.
+The findings therefore characterize the evaluated synthetic setting;
+real-system validation remains necessary.
 
 ## Interaction Scope
 
-The experiments cover pairwise and three-way interactions. They do not
-establish performance for arbitrary interaction orders. The residual
-localizer also returns at most one higher-order candidate from a
-selected residual configuration, leaving multiple simultaneous or
-overlapping higher-order interactions for future study.
+The experiments cover pairwise and three-way interactions, not
+arbitrary orders. The residual localizer also returns at most one
+higher-order candidate from a selected residual configuration, leaving
+multiple or overlapping higher-order interactions for future study.
 
 ## Hitting-Set Scalability
 
-Known interactions are suppressed through minimal hitting sets.
-Although practical at the evaluated sizes, wall-clock growth indicates
-increasing enumeration overhead. Larger systems may require optimized
-hitting-set algorithms or alternative formulations.
+Minimal hitting sets were practical at the evaluated sizes, but
+wall-clock growth indicates increasing enumeration overhead. Larger
+systems may require optimized algorithms or alternative formulations.
 
 ## Benchmark Fault Composition
 
 BSIB uses the maximum active failure probability when multiple faults
-are present. Real systems may exhibit additive, multiplicative,
-conditional, or non-monotonic composition, so alternative composition
-models require separate evaluation.
+are present. Additive, multiplicative, conditional, or non-monotonic
+fault composition requires separate evaluation.
 
 ## Stochastic Sampling and Parameters
 
-Finite stochastic samples can obscure weak interactions, as illustrated
-by the PAIR-002 holdout miss. Increasing sampling may reduce such
-false-negative risk at additional execution cost. Sensitivity analysis
-also covered only a limited parameter range, so different effect sizes
-or benchmark distributions may require different operating points.
+Finite samples can obscure weak interactions, as illustrated by the
+PAIR-002 miss. Additional sampling may reduce false negatives at
+greater execution cost. Sensitivity analysis also covered only a
+limited parameter range.
 
 ## Scaling and Statistical Uncertainty
 
-The holdout used 1,000 seeds per scenario, whereas scaling used only
-twenty seeds per capability count. Scaling results therefore provide
-stronger evidence about execution trends than precise recovery
-probabilities; observed 20/20 recovery should not be interpreted as
-zero underlying failure probability.
+The holdout used 1,000 seeds per scenario, whereas scaling used twenty
+per capability count. Scaling therefore provides stronger evidence
+about execution trends than recovery probabilities; observed 20/20
+recovery does not imply zero underlying failure probability.
 
 ## Baselines and Construct Validity
 
 The comparison includes SCIF V3, deletion localization, exhaustive
-discovery, and SCIF V4, but not every method from the broader
-fault-localization literature. Exact interaction recovery is
-appropriate for BSIB's known ground truth, while production debugging
+discovery, and SCIF V4, but not every fault-localization method. Exact
+recovery suits BSIB's known ground truth, whereas production debugging
 may also depend on severity, latency, reproducibility, and explanation
 quality.
 
 ## Internal Validity
 
-Keyed deterministic random streams reduce evaluation-order
-confounding, and 34 automated tests cover the principal benchmark and
-discovery components. Nevertheless, implementation errors remain a
-possible threat to internal validity.
+Keyed random streams reduce evaluation-order confounding, and 34
+automated tests cover principal benchmark and discovery components.
+Implementation errors nevertheless remain a possible threat.
 
 ---
 

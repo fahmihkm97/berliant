@@ -75,9 +75,7 @@ The keyed simulator therefore supports reproducible and fair comparisons among d
 
 \subsection{Pairwise Discovery}
 
-SCIF v0.0.4 begins with the SCIF v0.0.3 pairwise discovery procedure.
-
-The frozen evaluation configuration uses:
+SCIF v0.0.4 begins with the SCIF v0.0.3 pairwise procedure. The frozen configuration uses:
 
 \begin{itemize}
 \tightlist
@@ -99,11 +97,9 @@ The frozen evaluation configuration uses:
   confirmation posterior-support threshold of 0.95.
 \end{itemize}
 
-Initial screening uses relaxed empirical thresholds equal to 75\% of the minimum joint-failure threshold and 67\% of the minimum joint-risk-increment threshold. With the frozen parameters, these are 0.1125 and 0.067, respectively.
+Initial screening uses relaxed empirical thresholds of 0.1125 for joint failure rate and 0.067 for JRI, corresponding to 75\% and 67\% of their confirmation thresholds. Pairs satisfying both proceed directly to confirmation. If only the joint-rate threshold is met, posterior support for both screening conditions is estimated; support of at least 0.20 extends the baseline, singleton, and pair configurations to 300 trials before re-screening.
 
-A pair that immediately satisfies both screening thresholds proceeds to confirmation. If its joint rate reaches the screening threshold but its empirical JRI does not, SCIF estimates the posterior probability that both screening conditions hold. A probability of at least 0.20 triggers extension of the baseline, both singleton configurations, and the pair to 300 trials before screening is re-evaluated.
-
-During confirmation, the baseline and singleton subsets are extended to 1,000 trials and the candidate pair to 1,500 trials. Posterior support is estimated from 10,000 Beta posterior samples using Beta(f+0.5, n-f+0.5) for a configuration with f failures in n trials. The reported confidence is the fraction of posterior samples for which both the joint failure rate is at least 0.15 and the JRI is at least 0.10. A pair is confirmed only when its empirical thresholds are also satisfied and this posterior support is at least 0.95.
+For confirmation, the baseline and singleton subsets are extended to 1,000 trials and the pair to 1,500. Posterior support is estimated from 10,000 Beta(f+0.5, n-f+0.5) samples and equals the fraction satisfying both joint failure rate \textgreater= 0.15 and JRI \textgreater= 0.10. Confirmation requires these empirical thresholds and posterior support \textgreater= 0.95.
 
 \subsection{Limitation of Pairwise-Only Discovery}
 
