@@ -1,0 +1,25 @@
+id: BSIB-MIXED-001
+capabilities:
+- tools
+- structured_output
+- streaming
+- reasoning
+- parallel_tools
+- strict_schema
+- multimodal
+- explicit_tool_choice
+baseline_failure: 0.03
+faults:
+- id: F005
+  capabilities:
+  - tools
+  - streaming
+  failure_probability: 0.45
+  failure_class: CAPABILITY_SUPPRESSED
+- id: F006
+  capabilities:
+  - reasoning
+  - strict_schema
+  - multimodal
+  failure_probability: 0.6
+  failure_class: CAPABILITY_SUPPRESSED
