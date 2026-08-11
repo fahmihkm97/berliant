@@ -25,3 +25,6 @@ dev = [
     "ruff>=0.16.2",
     "types-pyyaml>=6.0.12.20260724",
 ]
+
+[tool.uv.build-backend]
+source-include = ["examples/**"]
