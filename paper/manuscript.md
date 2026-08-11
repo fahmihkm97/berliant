@@ -213,220 +213,49 @@ The contributions of this work are therefore:
 
 # Related Work
 
-## 1. Combinatorial Interaction Testing
+## 1. Combinatorial Testing and Interaction Localization
 
-Combinatorial testing (CT) addresses faults that arise from interactions
-among multiple input parameters or configuration options. Rather than
-enumerating every possible system configuration, t-way testing constructs
-test suites that cover combinations up to a selected interaction strength
-[@kuhn2008beyond; @nie2011survey].
+Combinatorial testing (CT) targets faults caused by interactions among input parameters or configuration options. Rather than enumerating every system configuration, t-way testing covers combinations up to a selected interaction strength [@kuhn2008beyond; @nie2011survey]. Higher-strength testing can expose interactions beyond pairs, but its cost increases rapidly with both interaction strength and the number of parameters.
 
-This literature provides the conceptual foundation for the present work:
-system behavior may depend on combinations of capabilities rather than on
-individual capabilities considered independently.
+Beyond detecting failing configurations, prior work has addressed localization of the combinations responsible for failure. Nie and Leung formalized the Minimal Failure-Causing Schema (MFS) for identifying minimal parameter-value combinations associated with failures [@nie2011mfs]. Zhang and Zhang proposed Faulty Interaction Characterization (FIC), which adaptively generates additional tests from previous outcomes [@zhang2011fic]. Shakya et al. similarly combined test augmentation and classification to isolate failure-inducing combinations [@shakya2012isolating], while error-locating arrays provide another adaptive combinatorial perspective [@martinez2009ela].
 
-Higher-strength combinatorial testing can expose interactions beyond
-pairs, but the required test space grows rapidly as the interaction
-strength and number of parameters increase [@kuhn2008beyond]. SCIF
-addresses a related cost problem from a different direction. Instead of
-constructing complete fixed-strength coverage for every interaction order,
-it begins with lower-order stochastic screening and increases search
-complexity only when unexplained residual risk remains.
+These studies establish adaptive interaction localization as prior art. SCIF addresses a narrower setting in which repeated executions estimate stochastic failure risk and search order is increased only when lower-order discoveries leave substantial unexplained risk.
 
-## 2. Failure-Inducing Interaction Localization
+## 2. Masking and Multiple Faults
 
-Detecting a failing configuration does not by itself identify the minimal
-combination responsible for the failure.
+Localization becomes harder when multiple interactions can affect the same configuration. Yilmaz et al. introduced a feedback-driven adaptive approach for reducing masking effects by identifying likely causes and generating tests intended to exercise combinations without them [@yilmaz2014masking].
 
-Nie and Leung formalized the Minimal Failure-Causing Schema (MFS) for
-combinatorial testing, providing a framework for identifying minimal
-parameter-value combinations associated with failure
-[@nie2011mfs].
+Niu et al. showed that multiple faults can interfere with traditional MFS identification and developed an approach specifically for multiple-fault settings [@niu2020multiple]. They later proposed an interleaving framework in which test generation and failure-inducing interaction identification exchange feedback during testing [@niu2020interleaving]. Pending-schema theory further examines unresolved, overlapping, and high-degree interactions in large configuration spaces [@niu2022pending].
 
-Several subsequent approaches improve this localization process.
+These works are particularly relevant to the OVERLAP and MIXED benchmarks used in this study. SCIF differs in how already-supported interactions are used: it constructs configurations that suppress those interactions, repeatedly measures the remaining empirical failure risk, and uses that residual signal as a gate for higher-order localization.
 
-Zhang and Zhang proposed Faulty Interaction Characterization (FIC) and
-FIC-BS, which generate new test cases adaptively based on previous
-outcomes in order to identify failure-causing parameter interactions
-[@zhang2011fic].
+## 3. Statistical and Probabilistic Localization
 
-Shakya et al. likewise augment existing combinatorial test results with
-additional tests and classification in order to isolate
-failure-inducing combinations [@shakya2012isolating].
+Probabilistic reasoning has also been applied to fault localization. The Probabilistic Failure-Causing Schema model represents probabilistic evidence for candidate schemas [@wang2019pfs]. BayesFLo uses Bayesian reasoning to rank suspicious input combinations [@ji2023bayesflo], while FROG uses logistic-regression coefficients to estimate suspiciousness and reduce the search space for larger failure-inducing combinations [@nishiura2024frog].
 
-Error-locating arrays and adaptive algorithms provide another
-combinatorial perspective on locating interaction faults
-[@martinez2009ela].
+SCIF therefore does not claim novelty from using probability alone. Its use of stochastic evidence is procedural: repeated executions estimate configuration-specific failure rates, these estimates support interaction confirmation through excess risk over lower-order subsets, and residual failure probability determines whether higher-order search is invoked.
 
-These methods establish that adaptive test generation and interaction
-localization are well-developed ideas. Consequently, SCIF does not claim
-novelty simply from adaptively generating additional tests or from seeking
-minimal failure-causing combinations.
+## 4. Minimality, Deletion, and Hitting Sets
 
-SCIF instead focuses on a stochastic setting in which the same
-configuration is repeatedly executed to estimate failure risk and in which
-the currently discovered interactions are explicitly suppressed before
-the algorithm decides whether to escalate to a higher interaction order.
+SCIF is also related to failure-minimization techniques. Delta Debugging iteratively simplifies failing inputs to isolate minimal failure-inducing conditions [@zeller2002delta]. SCIF's higher-order localization similarly evaluates removals, but direct deletion can be misleading when several interactions are simultaneously active. SCIF therefore applies removal-based localization after suppressing interactions already supported by the data.
 
-## 3. Masking and Multiple Faults
+Recent work is especially relevant here. NoPend addresses complete, sound, and scalable MFS identification and uses minimal hitting-set generation in its pending-space reasoning [@xie2026nopend]. Minimal hitting sets are thus not themselves a contribution of SCIF. In SCIF, their role is specifically to construct configurations that disable all currently known pairwise interactions so that repeated executions can estimate how much stochastic risk remains unexplained.
 
-Interaction localization becomes more difficult when several faults can
-affect the same test configuration.
+## 5. Reliability of Tool-Augmented AI Systems
 
-Yilmaz et al. studied masking effects in combinatorial interaction testing
-and introduced a feedback-driven adaptive process that detects potential
-masking, characterizes likely causes, and generates additional tests
-intended to exercise combinations without those likely causes
-[@yilmaz2014masking].
+BSIB's capability-oriented formulation is motivated by increasingly tool-enabled AI systems. FAIL-TaLMs evaluates failures involving under-specified queries and unavailable tools in single- and multi-tool settings [@trevino2025failtalms]. Other work shows that language models may also fail to recognize silent errors produced by faulty tools [@sun2024toolsfail].
 
-Niu et al. subsequently showed that multiple faults can trigger masking
-effects that interfere with traditional MFS identification and proposed
-an MFS model and supporting approach designed for the multiple-fault
-setting [@niu2020multiple].
+Such benchmarks establish the importance of reliability evaluation for capability-rich AI systems, but their primary objective is to characterize tool-use failures rather than localize minimal stochastic interactions among system capabilities. BSIB instead provides controlled hidden interaction structures, enabling SCIF to be evaluated against known ground truth.
 
-They also proposed an interleaving framework in which combinatorial test
-generation and failure-inducing interaction identification provide
-feedback to each other rather than occurring as completely separate
-phases [@niu2020interleaving].
+## 6. Positioning of SCIF
 
-The theory of pending schemas further examines unresolved interactions,
-including challenges involving multiple overlapping MFSs, high-degree
-interactions, and large parameter spaces [@niu2022pending].
+Prior research therefore already establishes t-way combinatorial testing, MFS localization, adaptive test generation, masking-aware and multiple-fault methods, probabilistic fault localization, failure minimization, and hitting-set-based reasoning.
 
-These studies are particularly relevant to the OVERLAP and MIXED
-benchmarks in BSIB. They also mean that masking and multiple-fault
-localization cannot themselves be treated as new contributions of SCIF.
+Accordingly, SCIF v0.0.4 is not positioned as the first adaptive, probabilistic, higher-order, masking-aware, or hitting-set-based interaction-localization method.
 
-The distinction explored by SCIF is narrower. Once lower-order
-interactions have been discovered, SCIF constructs suppression
-configurations that disable those known interactions and then directly
-measures whether a substantial stochastic failure signal remains. The
-remaining empirical risk is used as a gate for higher-order search.
+The design evaluated here is a **residual-risk-guided stochastic discovery pipeline**. It first screens and confirms lower-order interactions, constructs configurations that suppress interactions already supported by the data, repeatedly estimates the remaining failure risk, and invokes higher-order localization only when that residual evidence justifies escalation.
 
-## 4. Statistical and Probabilistic Fault Localization
-
-Most classical failure-inducing-schema formulations operate on test
-outcomes associated with candidate schemas. Later work has incorporated
-statistical or probabilistic reasoning into interaction localization.
-
-The Probabilistic Failure-Causing Schema (PFS) model explicitly represents
-probabilistic evidence for failure-causing schemas. Empirical comparison
-between MFS and PFS has shown different precision and recall behavior
-[@wang2019pfs].
-
-BayesFLo takes a Bayesian approach and produces probabilistic rankings of
-suspicious input combinations for software fault localization
-[@ji2023bayesflo].
-
-More recently, Nishiura et al. proposed FROGa and FROGb, which use
-logistic-regression coefficients to estimate the suspiciousness of
-failure-inducing combinations and to reduce the search space for larger
-interactions [@nishiura2024frog].
-
-Therefore, the use of probability or statistical modeling in fault
-localization is also not unique to SCIF.
-
-The stochastic role in SCIF is different from a ranking-only use of
-probability. Repeated executions provide empirical failure-rate estimates
-for configurations. These estimates are used both to confirm interactions
-through excess risk over lower-order subsets and to determine whether
-risk remains after already-discovered interactions have been suppressed.
-
-Thus probability estimates participate directly in the control flow of
-the discovery procedure.
-
-## 5. Minimality, Delta Debugging, and Hitting Sets
-
-Delta Debugging established a general strategy for simplifying a failing
-input until a minimal failure-inducing input or difference remains
-[@zeller2002delta].
-
-SCIF's residual higher-order localizer is related to this broader family
-of removal-based reasoning: capabilities are removed and the resulting
-change in empirical failure probability is measured.
-
-However, direct deletion can be confounded when several interactions are
-simultaneously active. This motivates applying removal-based localization
-only after already-discovered interactions have been suppressed in SCIF.
-
-A particularly important recent comparison is NoPend by Xie et al.,
-which addresses completeness, soundness, and scalability in MFS
-identification and uses minimal hitting-set generation as part of its
-pending-space reasoning [@xie2026nopend].
-
-This prior work means that minimal hitting sets are not themselves a novel
-algorithmic contribution of SCIF.
-
-Their role in SCIF is specific: hitting sets are used to construct
-configurations that disable all currently known pairwise interactions.
-Those configurations are then executed repeatedly to estimate residual
-stochastic risk. The hitting set is therefore part of the
-explained-risk-suppression stage rather than the final MFS-identification
-objective itself.
-
-## 6. Reliability of Tool-Augmented AI Systems
-
-The capability terminology used by BSIB is motivated by increasingly
-tool-augmented AI systems.
-
-FAIL-TaLMs evaluates failures caused by under-specified queries and
-unavailable tools across single- and multi-tool settings
-[@trevino2025failtalms].
-
-Other work has shown that language models can also struggle to recognize
-silent errors produced by faulty tools [@sun2024toolsfail].
-
-These benchmarks demonstrate that reliability evaluation of tool-enabled
-AI systems requires more than measuring ordinary text-generation
-quality. However, their primary goal is to characterize or benchmark
-tool-use failures rather than to identify minimal stochastic interactions
-among system capabilities.
-
-BSIB and SCIF therefore occupy a complementary experimental role: BSIB
-provides controlled hidden interaction structure, while SCIF investigates
-how efficiently those interaction structures can be localized from
-repeated stochastic outcomes.
-
-## 7. Positioning of SCIF
-
-Taken together, prior work already establishes:
-
-- t-way combinatorial interaction testing;
-- minimal failure-causing schemas;
-- adaptive interaction characterization;
-- test augmentation for fault localization;
-- masking-aware combinatorial testing;
-- multiple-fault MFS reasoning;
-- interleaved test generation and localization;
-- probabilistic and statistical fault localization;
-- removal-based failure minimization; and
-- minimal-hitting-set reasoning for MFS identification.
-
-Accordingly, the contribution of SCIF v0.0.4 should not be framed as the
-first method for adaptive combinatorial testing, higher-order
-localization, masking mitigation, probabilistic fault localization, or
-hitting-set-based fault identification.
-
-The specific design evaluated in this work is a
-**residual-risk-guided stochastic discovery pipeline**.
-
-Its defining sequence is:
-
-1. repeatedly sample low-order configurations;
-2. identify and statistically confirm pairwise interactions;
-3. construct configurations that suppress the interactions already
-   discovered;
-4. repeatedly execute those residual configurations;
-5. measure whether substantial unexplained failure risk remains; and
-6. invoke higher-order localization only when residual evidence
-   justifies escalation.
-
-This staged use of residual stochastic risk provides the principal
-positioning of SCIF relative to the prior methods reviewed above.
-
-The present study therefore evaluates whether residual-risk-guided
-escalation can preserve strong interaction recovery while avoiding the
-full execution cost of exhaustive higher-order enumeration.
+The experimental question is therefore whether this residual-risk-guided escalation can maintain accurate mixed-order interaction discovery while reducing simulator executions relative to exhaustive higher-order enumeration.
 
 ---
 
@@ -1550,115 +1379,53 @@ This case illustrates an unavoidable property of stochastic
 screening: a finite initial sample can occasionally obscure a real
 effect.
 
-Importantly, residual-risk detection subsequently recognized that
-substantial unexplained risk remained.
-
-The higher-order localizer then declined to report an unsupported
-higher-order candidate.
-
-Thus, the error remained a false negative rather than becoming a false
-positive.
-
-Retaining this failure without modifying the parameters after holdout
-inspection provides a more realistic estimate of the frozen method's
-performance.
+Importantly, residual-risk detection still identified unexplained
+risk, while the higher-order localizer declined to report an
+unsupported candidate. The miss therefore remained a false negative
+rather than becoming a false positive. We retained this outcome
+without post-holdout parameter tuning.
 
 ## 7. Sensitivity and Conservative Localization
 
-The sensitivity experiment shows that the higher-order removal
-threshold has a meaningful role.
+Sensitivity analysis indicates that the higher-order removal threshold
+controls a meaningful noise-versus-recall trade-off. The default value
+of 0.10 and the stricter value of 0.15 preserved exact recovery across
+the tested scenarios, whereas reducing the threshold to 0.05 lowered
+recovery on TRIPLE and MIXED.
 
-At the default value of 0.10, exact recovery remained 100% across the
-tested sensitivity scenarios.
+Diagnostics showed that stochastic removal effects from irrelevant
+capabilities occasionally exceeded the permissive threshold, producing
+oversized candidates that were subsequently rejected by the minimality
+check. This supports conservative filtering when localization relies on
+empirical rather than deterministic effects.
 
-Increasing the threshold to 0.15 also preserved exact recovery.
+## 8. Efficiency and Computational Cost
 
-Reducing it to 0.05 caused recovery to fall to 95% on TRIPLE and 96%
-on MIXED.
+Exhaustive discovery remains useful as an oracle-style baseline, but
+its configuration count grows combinatorially with capability count
+and interaction order. SCIF instead concentrates simulator executions
+on pairwise screening and conditionally invokes higher-order search
+only when residual evidence requires it. The scaling experiment shows
+that this strategy increasingly reduces simulator executions relative
+to exhaustive order-three enumeration as capability count grows.
 
-Diagnostic runs showed that irrelevant capabilities sometimes
-exhibited stochastic removal drops between approximately 0.05 and
-0.075.
+Execution savings should not be confused with uniformly low internal
+computational complexity. Wall-clock growth was steeper than simulator
+execution growth at larger capability counts, with minimal hitting-set
+enumeration a likely contributor. This identifies an implementation
+optimization target rather than a failure of interaction recovery.
 
-At the permissive threshold, these capabilities entered the candidate
-set.
+## 9. Implications
 
-The minimality check subsequently rejected the oversized candidate.
+The experiments support a residual-risk-guided strategy for stochastic
+interaction discovery: identify simpler interactions first, suppress
+what is already explained, measure the remaining risk, and escalate
+search order only when substantial unexplained evidence remains.
 
-This behavior suggests that conservative removal filtering is
-important because the localization stage operates on empirical
-probabilities rather than deterministic effects.
-
-## 8. Efficiency Relative to Exhaustive Search
-
-Exhaustive discovery is valuable as an oracle-style baseline because
-it systematically evaluates every configuration up to the selected
-interaction order.
-
-Its primary disadvantage is combinatorial growth.
-
-For eight capabilities, exhaustive order-three discovery requires
-93,000 executions under the experimental protocol.
-
-For twenty capabilities, the requirement becomes 1,351,000.
-
-SCIF v0.0.4 required a mean of only 52,200 executions at twenty
-capabilities in the scaling benchmark.
-
-The relative reduction increased from 75.48% at eight capabilities to
-96.14% at twenty capabilities.
-
-The increasing percentage reduction is expected because exhaustive
-order-three configuration count grows combinatorially, whereas much
-of the SCIF pipeline performs targeted pairwise screening and
-conditional residual evaluation.
-
-## 9. Execution Efficiency Is Not the Same as Computational Complexity
-
-The scaling experiment also reveals an important distinction between
-simulator execution efficiency and algorithmic overhead.
-
-Mean wall-clock time increased from approximately 0.23 seconds at
-eight capabilities to 2.67 seconds at twenty capabilities.
-
-The increase is larger than would be expected from simulator
-executions alone.
-
-One likely contributor is the current enumeration of minimal hitting
-sets used for pair suppression.
-
-Therefore, the current results should not be interpreted as evidence
-that every internal operation scales linearly.
-
-Rather, the experiments show that the number of expensive stochastic
-simulator executions remains substantially below exhaustive
-order-three enumeration over the tested range.
-
-Improving the hitting-set implementation is an important direction for
-future optimization.
-
-## 10. Implications
-
-The results support a broader design principle for stochastic system
-debugging.
-
-When multiple interaction orders may coexist, discovery need not begin
-with unrestricted high-order enumeration.
-
-A potentially more efficient strategy is:
-
-1. discover simple interactions first;
-2. explicitly suppress or condition on what has already been
-   explained;
-3. measure whether meaningful residual risk remains; and
-4. escalate search complexity only when the residual evidence
-   requires it.
-
-The current SCIF implementation demonstrates this principle for
-pairwise and selected three-way interaction structures.
-
-Whether the same idea generalizes to larger and more complex
-production systems remains an empirical question.
+SCIF v0.0.4 demonstrates this principle for the evaluated pairwise and
+three-way interaction structures. Generalization to larger
+interaction orders and production systems remains an open empirical
+question.
 
 ---
 

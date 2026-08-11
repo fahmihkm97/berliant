@@ -134,112 +134,50 @@ This case illustrates an unavoidable property of stochastic
 screening: a finite initial sample can occasionally obscure a real
 effect.
 
-Importantly, residual-risk detection subsequently recognized that
-substantial unexplained risk remained.
-
-The higher-order localizer then declined to report an unsupported
-higher-order candidate.
-
-Thus, the error remained a false negative rather than becoming a false
-positive.
-
-Retaining this failure without modifying the parameters after holdout
-inspection provides a more realistic estimate of the frozen method's
-performance.
+Importantly, residual-risk detection still identified unexplained
+risk, while the higher-order localizer declined to report an
+unsupported candidate. The miss therefore remained a false negative
+rather than becoming a false positive. We retained this outcome
+without post-holdout parameter tuning.
 
 ## 7. Sensitivity and Conservative Localization
 
-The sensitivity experiment shows that the higher-order removal
-threshold has a meaningful role.
+Sensitivity analysis indicates that the higher-order removal threshold
+controls a meaningful noise-versus-recall trade-off. The default value
+of 0.10 and the stricter value of 0.15 preserved exact recovery across
+the tested scenarios, whereas reducing the threshold to 0.05 lowered
+recovery on TRIPLE and MIXED.
 
-At the default value of 0.10, exact recovery remained 100% across the
-tested sensitivity scenarios.
+Diagnostics showed that stochastic removal effects from irrelevant
+capabilities occasionally exceeded the permissive threshold, producing
+oversized candidates that were subsequently rejected by the minimality
+check. This supports conservative filtering when localization relies on
+empirical rather than deterministic effects.
 
-Increasing the threshold to 0.15 also preserved exact recovery.
+## 8. Efficiency and Computational Cost
 
-Reducing it to 0.05 caused recovery to fall to 95% on TRIPLE and 96%
-on MIXED.
+Exhaustive discovery remains useful as an oracle-style baseline, but
+its configuration count grows combinatorially with capability count
+and interaction order. SCIF instead concentrates simulator executions
+on pairwise screening and conditionally invokes higher-order search
+only when residual evidence requires it. The scaling experiment shows
+that this strategy increasingly reduces simulator executions relative
+to exhaustive order-three enumeration as capability count grows.
 
-Diagnostic runs showed that irrelevant capabilities sometimes
-exhibited stochastic removal drops between approximately 0.05 and
-0.075.
+Execution savings should not be confused with uniformly low internal
+computational complexity. Wall-clock growth was steeper than simulator
+execution growth at larger capability counts, with minimal hitting-set
+enumeration a likely contributor. This identifies an implementation
+optimization target rather than a failure of interaction recovery.
 
-At the permissive threshold, these capabilities entered the candidate
-set.
+## 9. Implications
 
-The minimality check subsequently rejected the oversized candidate.
+The experiments support a residual-risk-guided strategy for stochastic
+interaction discovery: identify simpler interactions first, suppress
+what is already explained, measure the remaining risk, and escalate
+search order only when substantial unexplained evidence remains.
 
-This behavior suggests that conservative removal filtering is
-important because the localization stage operates on empirical
-probabilities rather than deterministic effects.
-
-## 8. Efficiency Relative to Exhaustive Search
-
-Exhaustive discovery is valuable as an oracle-style baseline because
-it systematically evaluates every configuration up to the selected
-interaction order.
-
-Its primary disadvantage is combinatorial growth.
-
-For eight capabilities, exhaustive order-three discovery requires
-93,000 executions under the experimental protocol.
-
-For twenty capabilities, the requirement becomes 1,351,000.
-
-SCIF v0.0.4 required a mean of only 52,200 executions at twenty
-capabilities in the scaling benchmark.
-
-The relative reduction increased from 75.48% at eight capabilities to
-96.14% at twenty capabilities.
-
-The increasing percentage reduction is expected because exhaustive
-order-three configuration count grows combinatorially, whereas much
-of the SCIF pipeline performs targeted pairwise screening and
-conditional residual evaluation.
-
-## 9. Execution Efficiency Is Not the Same as Computational Complexity
-
-The scaling experiment also reveals an important distinction between
-simulator execution efficiency and algorithmic overhead.
-
-Mean wall-clock time increased from approximately 0.23 seconds at
-eight capabilities to 2.67 seconds at twenty capabilities.
-
-The increase is larger than would be expected from simulator
-executions alone.
-
-One likely contributor is the current enumeration of minimal hitting
-sets used for pair suppression.
-
-Therefore, the current results should not be interpreted as evidence
-that every internal operation scales linearly.
-
-Rather, the experiments show that the number of expensive stochastic
-simulator executions remains substantially below exhaustive
-order-three enumeration over the tested range.
-
-Improving the hitting-set implementation is an important direction for
-future optimization.
-
-## 10. Implications
-
-The results support a broader design principle for stochastic system
-debugging.
-
-When multiple interaction orders may coexist, discovery need not begin
-with unrestricted high-order enumeration.
-
-A potentially more efficient strategy is:
-
-1. discover simple interactions first;
-2. explicitly suppress or condition on what has already been
-   explained;
-3. measure whether meaningful residual risk remains; and
-4. escalate search complexity only when the residual evidence
-   requires it.
-
-The current SCIF implementation demonstrates this principle for
-pairwise and selected three-way interaction structures.
-
-Whether the same idea generalizes to larger and more complex
-production systems remains an empirical question.
+SCIF v0.0.4 demonstrates this principle for the evaluated pairwise and
+three-way interaction structures. Generalization to larger
+interaction orders and production systems remains an open empirical
+question.
