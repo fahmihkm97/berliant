@@ -50,11 +50,14 @@ JRI(C)
 =
 \hat{p}(C)
 -
-\max_{S \subset C}
+\max_{S \subsetneq C}
 \hat{p}(S),
 \]
 
-where \(\hat{p}\) denotes an empirical failure-rate estimate.
+where \(\hat{p}\) denotes an empirical failure-rate estimate and
+the maximum is taken over proper lower-order subsets of \(C\). For a
+pair, these comparison configurations are the baseline and the two
+singleton capabilities.
 
 A candidate is therefore supported when its joint failure rate is
 sufficiently large and its observed risk cannot be explained by a
@@ -99,18 +102,31 @@ The frozen evaluation configuration uses:
 - 1,500 confirmation trials;
 - 1,000 subset-confirmation trials;
 - minimum joint failure rate of 0.15;
-- minimum joint-risk increment of 0.10; and
-- confidence threshold of 0.95.
+- minimum joint-risk increment of 0.10;
+- screening posterior-probability threshold of 0.20; and
+- confirmation posterior-support threshold of 0.95.
 
-Initial sampling provides a low-cost estimate of the failure signal.
+Initial screening uses relaxed empirical thresholds equal to 75% of
+the minimum joint-failure threshold and 67% of the minimum
+joint-risk-increment threshold. With the frozen parameters, these are
+0.1125 and 0.067, respectively.
 
-Pairs with sufficiently convincing evidence proceed to confirmation.
+A pair that immediately satisfies both screening thresholds proceeds
+to confirmation. If its joint rate reaches the screening threshold
+but its empirical JRI does not, SCIF estimates the posterior
+probability that both screening conditions hold. A probability of at
+least 0.20 triggers extension of the baseline, both singleton
+configurations, and the pair to 300 trials before screening is
+re-evaluated.
 
-Borderline configurations may receive additional screening trials
-before a final decision is made.
-
-This architecture concentrates stochastic executions on configurations
-that show evidence of interaction risk.
+During confirmation, the baseline and singleton subsets are extended
+to 1,000 trials and the candidate pair to 1,500 trials. Posterior
+support is estimated from 10,000 Beta posterior samples using
+Beta(f+0.5, n-f+0.5) for a configuration with f failures in n trials.
+The reported confidence is the fraction of posterior samples for which
+both the joint failure rate is at least 0.15 and the JRI is at least
+0.10. A pair is confirmed only when its empirical thresholds are also
+satisfied and this posterior support is at least 0.95.
 
 ## Limitation of Pairwise-Only Discovery
 

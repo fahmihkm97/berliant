@@ -80,7 +80,7 @@ MIXED & SCIF V4    & 100\% & 22,800 \\
 
 V3 and V4 both recovered the tested pairwise and overlapping-pair structures, although V4 incurred additional residual-verification cost. V3 could not recover the pure triple because its proper pairwise subsets remained near baseline. Deletion recovered the isolated TRIPLE but failed on OVERLAP and MIXED.
 
-SCIF V4 achieved 100\% recovery on all four representative scenarios. For TRIPLE it used 17,700 mean executions versus 93,000 for exhaustive order-three discovery, a reduction of approximately 80.97\%. For MIXED, V4 used 22,800 executions versus 93,000, a reduction of 75.48\%.
+Across the 100 comparison seeds for each representative scenario, SCIF V4 achieved 100\% exact recovery on all four scenarios. For TRIPLE, it used 17,700 mean executions versus 93,000 for exhaustive order-three discovery, a reduction of approximately 80.97\%. For MIXED, V4 used 22,800 executions versus 93,000, a reduction of 75.48\%.
 
 \subsection{RQ3 --- Ablation of Residual-Risk Reasoning}
 
@@ -105,7 +105,7 @@ MIXED    & 0\% & 100\% escalation & 100\% exact \\
 \end{tabular}
 \end{table*}
 
-Across 500 ablation runs, there were no false residual escalations, missed residual escalations, or false higher-order candidates. Residual detection therefore identifies when current discoveries leave important risk unexplained, while localization converts that evidence into an exact higher-order candidate.
+Across 500 ablation runs, there were no false residual escalations, missed residual escalations, or false higher-order candidates. In these ablation runs, residual detection identified when current discoveries left important risk unexplained, while localization converted that evidence into an exact higher-order candidate.
 
 Mean executions for TRIPLE were 3,700 for V3, 4,700 for V3 plus residual detection, and 17,700 for full V4. For MIXED they were 7,800, 10,800, and 22,800, respectively. Higher-order localization thus adds substantial cost only after escalation is triggered.
 
@@ -117,7 +117,7 @@ The important degradation occurred when the removal threshold was reduced to 0.0
 
 \subsection{RQ5 --- Scaling Behavior}
 
-SCIF obtained 20/20 exact recoveries for every tested capability count. Because only twenty seeds were used per size, the 95\% Wilson interval for 20/20 recovery is approximately 83.89\%--100\%; these results are therefore initial stability evidence rather than precise recovery estimates.
+SCIF obtained 20/20 exact recoveries at every tested capability count. Because only twenty seeds were used per size, the 95\% Wilson interval for 20/20 recovery is approximately 83.89\%--100\%; these results are therefore initial stability evidence rather than precise recovery estimates.
 
 \begin{table*}[t]
 \caption{Scaling of recovery and simulator execution cost.}

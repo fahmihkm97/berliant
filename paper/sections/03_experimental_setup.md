@@ -163,6 +163,12 @@ For exhaustive order-three discovery:
 configurations are evaluated, corresponding to 93,000 simulator
 executions.
 
+For adaptive methods, execution cost is the actual number of simulator
+invocations performed by the method, including screening, retesting,
+confirmation, residual probing, and localization where applicable.
+The exhaustive baselines instead use the fixed 1,000-trial budget for
+every enumerated configuration.
+
 ## Ablation Study
 
 The ablation study uses 100 seeds:

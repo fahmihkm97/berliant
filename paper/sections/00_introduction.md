@@ -81,7 +81,10 @@ configuration.
 
 This produces the pipeline:
 
-**pairwise discovery** $ightarrow$ **known-pair suppression** $ightarrow$ **residual-risk detection** $ightarrow$ **conditional higher-order localization**.
+**pairwise discovery** $\rightarrow$ **known-pair suppression**
+$\rightarrow$ **residual-risk detection**
+$\rightarrow$ **conditional higher-order localization**.
+
 The method is evaluated using the Benchmark for Stochastic Interaction
 Bugs (BSIB), a synthetic benchmark family designed to provide hidden
 ground-truth capability interactions while exposing only stochastic

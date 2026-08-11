@@ -10,9 +10,9 @@ Modern AI systems combine capabilities such as tool use, structured output, stre
 
 We present SCIF v0.0.4, a residual-risk-guided method for stochastic mixed-order interaction discovery. SCIF first screens and confirms pairwise interactions, suppresses those already supported by the data, measures the remaining empirical failure risk, and invokes higher-order localization only when substantial unexplained risk remains.
 
-Evaluation on the synthetic BSIB benchmark family produced 6,999 exact recoveries across 7,000 unseen holdout runs (99.9857%), with no observed false interaction candidates. In a 100-seed method comparison, SCIF v0.0.4 recovered all evaluated pairwise, overlapping, pure-three-way, and mixed-order structures; SCIF V3 and deletion localization both achieved 0% exact recovery on the mixed scenario. For that eight-capability benchmark, SCIF required 22,800 mean simulator executions versus 93,000 for exhaustive order-three discovery, a 75.48% reduction.
+Evaluation on the synthetic BSIB benchmark family produced 6,999 exact recoveries across 7,000 unseen holdout runs (99.9857%), with no observed false interaction candidates. In a 100-seed method comparison, SCIF v0.0.4 recovered all evaluated pairwise, overlapping, pure three-way, and mixed-order structures; SCIF V3 and deletion localization both achieved 0% exact recovery on the mixed scenario. For that eight-capability benchmark, SCIF required 22,800 mean simulator executions versus 93,000 for exhaustive order-three discovery, a 75.48% reduction.
 
-Ablation experiments confirmed distinct roles for residual-risk detection and higher-order localization. Across scaling experiments from eight to twenty capabilities, SCIF achieved 20/20 observed exact recoveries at each size while execution reduction reached 96.14%. These results support residual-risk-guided escalation as a promising approach for stochastic interaction discovery, while external validation beyond synthetic benchmarks remains future work.
+Ablation experiments showed distinct roles for residual-risk detection and higher-order localization. Across scaling experiments from eight to twenty capabilities, SCIF achieved 20/20 observed exact recoveries at each size while execution reduction reached 96.14%. These results support residual-risk-guided escalation as a promising approach for stochastic interaction discovery, while external validation beyond synthetic benchmarks remains future work.
 
 ---
 
@@ -99,10 +99,10 @@ configuration.
 
 This produces the pipeline:
 
-**pairwise discovery** $
-ightarrow$ **known-pair suppression** $
-ightarrow$ **residual-risk detection** $
-ightarrow$ **conditional higher-order localization**.
+**pairwise discovery** $\rightarrow$ **known-pair suppression**
+$\rightarrow$ **residual-risk detection**
+$\rightarrow$ **conditional higher-order localization**.
+
 The method is evaluated using the Benchmark for Stochastic Interaction
 Bugs (BSIB), a synthetic benchmark family designed to provide hidden
 ground-truth capability interactions while exposing only stochastic
@@ -224,13 +224,13 @@ We evaluate exact recovery, missed interactions, and observed false interaction 
 
 **How does SCIF v0.0.4 compare with pairwise discovery, deletion localization, and exhaustive discovery?**
 
-We compare both exact interaction recovery and simulator execution cost on representative pairwise, overlapping, pure-three-way, and mixed-order scenarios.
+We compare both exact interaction recovery and simulator execution cost on representative pairwise, overlapping, pure three-way, and mixed-order scenarios.
 
 ## RQ3 — Contribution of Residual-Risk Reasoning
 
 **Do residual-risk detection and higher-order localization provide distinct benefits?**
 
-Ablation experiments compare pairwise discovery alone, pairwise discovery with residual-risk detection, and the complete SCIF V4 pipeline.
+Ablation experiments compare pairwise discovery alone, pairwise discovery with residual-risk detection, and the full SCIF v0.0.4 pipeline.
 
 ## RQ4 — Parameter Sensitivity
 
@@ -298,11 +298,14 @@ JRI(C)
 =
 \hat{p}(C)
 -
-\max_{S \subset C}
+\max_{S \subsetneq C}
 \hat{p}(S),
 \]
 
-where \(\hat{p}\) denotes an empirical failure-rate estimate.
+where \(\hat{p}\) denotes an empirical failure-rate estimate and
+the maximum is taken over proper lower-order subsets of \(C\). For a
+pair, these comparison configurations are the baseline and the two
+singleton capabilities.
 
 A candidate is therefore supported when its joint failure rate is
 sufficiently large and its observed risk cannot be explained by a
@@ -347,18 +350,31 @@ The frozen evaluation configuration uses:
 - 1,500 confirmation trials;
 - 1,000 subset-confirmation trials;
 - minimum joint failure rate of 0.15;
-- minimum joint-risk increment of 0.10; and
-- confidence threshold of 0.95.
+- minimum joint-risk increment of 0.10;
+- screening posterior-probability threshold of 0.20; and
+- confirmation posterior-support threshold of 0.95.
 
-Initial sampling provides a low-cost estimate of the failure signal.
+Initial screening uses relaxed empirical thresholds equal to 75% of
+the minimum joint-failure threshold and 67% of the minimum
+joint-risk-increment threshold. With the frozen parameters, these are
+0.1125 and 0.067, respectively.
 
-Pairs with sufficiently convincing evidence proceed to confirmation.
+A pair that immediately satisfies both screening thresholds proceeds
+to confirmation. If its joint rate reaches the screening threshold
+but its empirical JRI does not, SCIF estimates the posterior
+probability that both screening conditions hold. A probability of at
+least 0.20 triggers extension of the baseline, both singleton
+configurations, and the pair to 300 trials before screening is
+re-evaluated.
 
-Borderline configurations may receive additional screening trials
-before a final decision is made.
-
-This architecture concentrates stochastic executions on configurations
-that show evidence of interaction risk.
+During confirmation, the baseline and singleton subsets are extended
+to 1,000 trials and the candidate pair to 1,500 trials. Posterior
+support is estimated from 10,000 Beta posterior samples using
+Beta(f+0.5, n-f+0.5) for a configuration with f failures in n trials.
+The reported confidence is the fraction of posterior samples for which
+both the joint failure rate is at least 0.15 and the JRI is at least
+0.10. A pair is confirmed only when its empirical thresholds are also
+satisfied and this posterior support is at least 0.95.
 
 ## Limitation of Pairwise-Only Discovery
 
@@ -674,6 +690,12 @@ For exhaustive order-three discovery:
 configurations are evaluated, corresponding to 93,000 simulator
 executions.
 
+For adaptive methods, execution cost is the actual number of simulator
+invocations performed by the method, including screening, retesting,
+confirmation, residual probing, and localization where applicable.
+The exhaustive baselines instead use the fixed 1,000-trial budget for
+every enumerated configuration.
+
 ## Ablation Study
 
 The ablation study uses 100 seeds:
@@ -890,9 +912,10 @@ cost. V3 could not recover the pure triple because its proper pairwise
 subsets remained near baseline. Deletion recovered the isolated
 TRIPLE but failed on OVERLAP and MIXED.
 
-SCIF V4 achieved 100% recovery on all four representative scenarios.
-For TRIPLE it used 17,700 mean executions versus 93,000 for exhaustive
-order-three discovery, a reduction of approximately 80.97%. For MIXED,
+Across the 100 comparison seeds for each representative scenario,
+SCIF V4 achieved 100% exact recovery on all four scenarios. For TRIPLE,
+it used 17,700 mean executions versus 93,000 for exhaustive order-three
+discovery, a reduction of approximately 80.97%. For MIXED,
 V4 used 22,800 executions versus 93,000, a reduction of 75.48%.
 
 ## RQ3 — Ablation of Residual-Risk Reasoning
@@ -912,9 +935,9 @@ higher-order localization.
 
 Across 500 ablation runs, there were no false residual escalations,
 missed residual escalations, or false higher-order candidates.
-Residual detection therefore identifies when current discoveries leave
-important risk unexplained, while localization converts that evidence
-into an exact higher-order candidate.
+In these ablation runs, residual detection identified when current
+discoveries left important risk unexplained, while localization
+converted that evidence into an exact higher-order candidate.
 
 Mean executions for TRIPLE were 3,700 for V3, 4,700 for V3 plus
 residual detection, and 17,700 for full V4. For MIXED they were 7,800,
@@ -948,7 +971,7 @@ false-positive reporting. The frozen value of 0.10 was retained.
 *Figure 5. Relative execution reduction of SCIF V4 compared with exhaustive order-three discovery.*
 
 
-SCIF obtained 20/20 exact recoveries for every tested capability count.
+SCIF obtained 20/20 exact recoveries at every tested capability count.
 Because only twenty seeds were used per size, the 95% Wilson interval
 for 20/20 recovery is approximately 83.89%--100%; these results are
 therefore initial stability evidence rather than precise recovery estimates.
@@ -1044,9 +1067,9 @@ than turning them into false interaction reports.
 
 ## Efficiency and Implications
 
-SCIF increasingly reduces simulator executions relative to exhaustive
-order-three discovery as capability count grows, reaching a 96.14%
-reduction at twenty capabilities. This execution advantage should be
+Within the tested range, SCIF achieved progressively larger reductions
+in simulator executions relative to exhaustive order-three discovery,
+reaching a 96.14% reduction at twenty capabilities. This execution advantage should be
 distinguished from implementation complexity: wall-clock growth at the
 largest tested size indicates minimal hitting-set enumeration as an
 optimization target.
@@ -1137,10 +1160,11 @@ detection, and conditional higher-order localization.
 Across 7,000 unseen BSIB holdout runs, SCIF achieved 6,999 exact
 recoveries with no observed false interaction candidates. The
 representative comparison further showed exact recovery across tested
-pairwise, overlapping, pure-triple, and mixed-order structures, while
-ablation confirmed distinct roles for residual detection and
-higher-order localization. Execution reduction relative to exhaustive
-order-three discovery reached 96.14% at twenty capabilities.
+pairwise, overlapping, pure three-way, and mixed-order structures, while
+ablation showed distinct roles for residual detection and higher-order
+localization. In the tested scaling study, execution reduction relative
+to exhaustive order-three discovery reached 96.14% at twenty
+capabilities.
 
 These results support residual-risk-guided escalation within the
 evaluated synthetic setting: increase search order only when existing

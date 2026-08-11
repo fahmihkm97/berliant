@@ -30,6 +30,6 @@ The sensitivity study shows a noise-versus-recall trade-off in the higher-order 
 
 \subsection{Efficiency and Implications}
 
-SCIF increasingly reduces simulator executions relative to exhaustive order-three discovery as capability count grows, reaching a 96.14\% reduction at twenty capabilities. This execution advantage should be distinguished from implementation complexity: wall-clock growth at the largest tested size indicates minimal hitting-set enumeration as an optimization target.
+Within the tested range, SCIF achieved progressively larger reductions in simulator executions relative to exhaustive order-three discovery, reaching a 96.14\% reduction at twenty capabilities. This execution advantage should be distinguished from implementation complexity: wall-clock growth at the largest tested size indicates minimal hitting-set enumeration as an optimization target.
 
 Overall, the experiments support residual-risk-guided escalation: discover simpler interactions first, suppress what they explain, and increase search order only when substantial unexplained risk remains. The evidence is limited to the evaluated pairwise and three-way synthetic structures; broader interaction orders and production systems require separate validation.

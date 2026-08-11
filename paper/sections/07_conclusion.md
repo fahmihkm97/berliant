@@ -8,10 +8,11 @@ detection, and conditional higher-order localization.
 Across 7,000 unseen BSIB holdout runs, SCIF achieved 6,999 exact
 recoveries with no observed false interaction candidates. The
 representative comparison further showed exact recovery across tested
-pairwise, overlapping, pure-triple, and mixed-order structures, while
-ablation confirmed distinct roles for residual detection and
-higher-order localization. Execution reduction relative to exhaustive
-order-three discovery reached 96.14% at twenty capabilities.
+pairwise, overlapping, pure three-way, and mixed-order structures, while
+ablation showed distinct roles for residual detection and higher-order
+localization. In the tested scaling study, execution reduction relative
+to exhaustive order-three discovery reached 96.14% at twenty
+capabilities.
 
 These results support residual-risk-guided escalation within the
 evaluated synthetic setting: increase search order only when existing

@@ -64,9 +64,9 @@ than turning them into false interaction reports.
 
 ## Efficiency and Implications
 
-SCIF increasingly reduces simulator executions relative to exhaustive
-order-three discovery as capability count grows, reaching a 96.14%
-reduction at twenty capabilities. This execution advantage should be
+Within the tested range, SCIF achieved progressively larger reductions
+in simulator executions relative to exhaustive order-three discovery,
+reaching a 96.14% reduction at twenty capabilities. This execution advantage should be
 distinguished from implementation complexity: wall-clock growth at the
 largest tested size indicates minimal hitting-set enumeration as an
 optimization target.
