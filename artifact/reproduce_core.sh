@@ -15,11 +15,15 @@ echo "2. Statistical audit"
 uv run python experiments/statistical_audit.py
 
 echo
-echo "3. Generate paper figures"
+echo "3. Quantitative claim audit"
+uv run python experiments/quantitative_claim_audit.py
+
+echo
+echo "4. Generate paper figures"
 uv run python experiments/make_paper_figures.py
 
 echo
-echo "4. Rebuild manuscript"
+echo "5. Rebuild manuscript"
 uv run python experiments/build_manuscript.py
 
 echo
