@@ -1,0 +1,5 @@
+capabilities,runs,exact_recovery,mean_executions,p95_executions,exhaustive_executions,reduction_percent,mean_seconds
+8,20,1.00,22800,22800,93000,75.48,0.2282
+12,20,1.00,31000,31000,299000,89.63,0.3179
+16,20,1.00,40800,40800,697000,94.15,0.5400
+20,20,1.00,52200,52200,1351000,96.14,2.6731
