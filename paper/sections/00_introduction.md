@@ -122,36 +122,28 @@ setting. In the scaling study, the reduction increased to 96.14% at
 twenty capabilities while exact recovery remained 100% across the
 twenty evaluated seeds.
 
-Prior research has established the foundations of combinatorial
-interaction testing and minimal failure-causing schemas
-[@kuhn2008beyond; @nie2011survey; @nie2011mfs]. Adaptive approaches
-have also been developed for characterizing failure-causing
-interactions [@zhang2011fic], while feedback-driven and multiple-fault
-methods explicitly address masking effects
-[@yilmaz2014masking; @niu2020multiple]. Statistical and probabilistic
-fault-localization approaches further demonstrate that uncertainty
-over candidate interaction causes is not unique to the present work
-[@wang2019pfs; @ji2023bayesflo; @nishiura2024frog].
+Prior work already establishes combinatorial interaction testing,
+minimal failure-causing schemas, adaptive interaction localization,
+masking-aware multiple-fault methods, and probabilistic fault
+localization [@kuhn2008beyond; @nie2011mfs; @zhang2011fic;
+@yilmaz2014masking; @niu2020multiple; @nishiura2024frog].
 
-Accordingly, SCIF is not positioned as the first adaptive,
-higher-order, masking-aware, or probabilistic fault-localization
-method. The narrower contribution evaluated here is the use of
-**residual stochastic risk as an escalation signal**: interactions
-already supported by the data are suppressed, the remaining
-configuration is repeatedly executed, and higher-order localization is
-invoked only when substantial unexplained risk remains.
+SCIF is therefore not positioned as the first adaptive, higher-order,
+masking-aware, or probabilistic localization method. The contribution
+evaluated here is narrower: **residual stochastic risk is used as an
+escalation signal**. Interactions already supported by the data are
+suppressed, the remaining risk is estimated through repeated execution,
+and higher-order localization is invoked only when substantial
+unexplained risk remains.
 
-The contributions of this work are therefore:
+The contributions of this work are:
 
-1. a formulation of stochastic capability-interaction discovery as a
-   minimal-risk localization problem;
-2. the BSIB benchmark family for controlled stochastic interaction
-   evaluation;
-3. an adaptive pairwise discovery foundation;
-4. known-interaction suppression followed by residual-risk detection;
-5. conditional residual higher-order localization;
-6. empirical comparison against pairwise, deletion, and exhaustive
-   baselines;
-7. ablation and sensitivity analysis of the proposed stages; and
-8. an initial scaling analysis of discovery cost as capability count
-   increases.
+1. the BSIB benchmark formulation for controlled stochastic
+   capability-interaction evaluation;
+2. the SCIF pipeline combining pairwise discovery, known-interaction
+   suppression, residual-risk detection, and conditional higher-order
+   localization;
+3. unseen-holdout, baseline-comparison, ablation, and sensitivity
+   evaluation of the frozen method; and
+4. an initial scaling analysis of recovery and execution cost as
+   capability count increases.
