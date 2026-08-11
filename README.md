@@ -90,4 +90,4 @@ uv run pytest -q
 
 ## License
 
-A license has not yet been selected for the first public release.
+Licensed under the Apache License 2.0.
