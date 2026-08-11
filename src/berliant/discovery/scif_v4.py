@@ -2,6 +2,10 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import combinations
 
+from berliant.discovery.residual_localization import (
+    HigherOrderLocalizationReport,
+    ResidualHigherOrderLocalizer,
+)
 from berliant.discovery.scif import (
     InvokeFunction,
     SCIFReport,
@@ -28,23 +32,18 @@ class ResidualRiskReport:
 class SCIFV4Report:
     pairwise_report: SCIFReport
     residual: ResidualRiskReport
+    higher_order: HigherOrderLocalizationReport | None
     executions: int
 
 
 class SCIFDiscoveryV4:
     """
-    SCIF v0.0.4 — stage 1.
+    SCIF v0.0.4.
 
-    V4 orchestrates SCIF V3 pairwise discovery and adds
-    residual-risk detection.
-
-    Known pairwise interactions are disabled using minimal
-    hitting sets. If substantial failure risk remains after
-    known pairwise interactions are disabled, the scenario is
-    flagged for higher-order escalation.
-
-    Higher-order localization is intentionally deferred to the
-    next V4 stage.
+    Pipeline:
+    1. SCIF V3 pairwise discovery.
+    2. Residual-risk detection after known pair suppression.
+    3. Higher-order localization when residual risk remains.
     """
 
     def __init__(
@@ -64,6 +63,10 @@ class SCIFDiscoveryV4:
         residual_trials: int = 1000,
         min_residual_failure: float = 0.15,
         min_residual_increment: float = 0.10,
+        higher_order_trials: int = 1000,
+        higher_order_min_failure: float = 0.15,
+        higher_order_min_removal_drop: float = 0.10,
+        higher_order_min_candidate_size: int = 3,
         seed: int = 20260810,
     ) -> None:
         if residual_trials <= 0:
@@ -76,6 +79,7 @@ class SCIFDiscoveryV4:
             raise ValueError("min_residual_increment must be between 0 and 1")
 
         self.invoke = invoke
+
         self.capabilities = tuple(sorted(set(capabilities)))
 
         self.residual_trials = residual_trials
@@ -95,6 +99,14 @@ class SCIFDiscoveryV4:
             confidence_threshold=(confidence_threshold),
             posterior_samples=posterior_samples,
             seed=seed,
+        )
+
+        self.higher_order_localizer = ResidualHigherOrderLocalizer(
+            invoke=invoke,
+            trials_per_config=(higher_order_trials),
+            min_failure=(higher_order_min_failure),
+            min_removal_drop=(higher_order_min_removal_drop),
+            min_candidate_size=(higher_order_min_candidate_size),
         )
 
     def _run_trials(
@@ -195,6 +207,7 @@ class SCIFDiscoveryV4:
 
         if not known_pairs:
             probe_failure_rates[()] = full_failure_rate
+
         else:
             for removal_set in removal_sets:
                 removed = frozenset(removal_set)
@@ -231,6 +244,28 @@ class SCIFDiscoveryV4:
             executions=executions,
         )
 
+    def _localize_residual(
+        self,
+        residual_report: ResidualRiskReport,
+    ) -> HigherOrderLocalizationReport | None:
+        if not residual_report.residual_detected:
+            return None
+
+        probe_rates = residual_report.probe_failure_rates
+
+        removal_set = max(
+            probe_rates,
+            key=lambda candidate: probe_rates[candidate],
+        )
+
+        removed = frozenset(removal_set)
+
+        residual_configuration = tuple(
+            capability for capability in self.capabilities if capability not in removed
+        )
+
+        return self.higher_order_localizer.localize(residual_configuration)
+
     def discover(
         self,
     ) -> SCIFV4Report:
@@ -238,8 +273,22 @@ class SCIFDiscoveryV4:
 
         residual_report = self._residual_probe(pairwise_report)
 
+        higher_order_report = self._localize_residual(residual_report)
+
+        higher_order_executions = 0
+
+        if higher_order_report is not None:
+            higher_order_executions = higher_order_report.executions
+
+        total_executions = (
+            pairwise_report.executions
+            + residual_report.executions
+            + higher_order_executions
+        )
+
         return SCIFV4Report(
             pairwise_report=(pairwise_report),
             residual=(residual_report),
-            executions=(pairwise_report.executions + residual_report.executions),
+            higher_order=(higher_order_report),
+            executions=(total_executions),
         )

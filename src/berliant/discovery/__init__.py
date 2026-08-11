@@ -7,6 +7,10 @@ from berliant.discovery.exhaustive import (
     ExhaustiveDiscovery,
     InteractionCandidate,
 )
+from berliant.discovery.residual_localization import (
+    HigherOrderLocalizationReport,
+    ResidualHigherOrderLocalizer,
+)
 from berliant.discovery.scif import (
     SCIFCandidate,
     SCIFDiscovery,
@@ -26,7 +30,9 @@ __all__ = [
     "DeletionReport",
     "DiscoveryReport",
     "ExhaustiveDiscovery",
+    "HigherOrderLocalizationReport",
     "InteractionCandidate",
+    "ResidualHigherOrderLocalizer",
     "ResidualRiskReport",
     "SCIFCandidate",
     "SCIFDiscovery",
