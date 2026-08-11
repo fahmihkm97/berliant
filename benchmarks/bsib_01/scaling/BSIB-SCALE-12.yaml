@@ -1,0 +1,29 @@
+id: BSIB-SCALE-12
+capabilities:
+- tools
+- structured_output
+- streaming
+- reasoning
+- parallel_tools
+- strict_schema
+- multimodal
+- explicit_tool_choice
+- noise_09
+- noise_10
+- noise_11
+- noise_12
+baseline_failure: 0.03
+faults:
+- id: F-SCALE-PAIR
+  capabilities:
+  - tools
+  - streaming
+  failure_probability: 0.45
+  failure_class: CAPABILITY_SUPPRESSED
+- id: F-SCALE-TRIPLE
+  capabilities:
+  - reasoning
+  - strict_schema
+  - multimodal
+  failure_probability: 0.6
+  failure_class: CAPABILITY_SUPPRESSED
