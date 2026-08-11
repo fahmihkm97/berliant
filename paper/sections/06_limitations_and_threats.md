@@ -6,7 +6,7 @@ BSIB provides controlled stochastic behavior and exact hidden ground
 truth but cannot reproduce the full complexity of production AI
 systems, including state dependence, non-stationarity, continuous
 parameters, semantic failures, and environmental effects. The results
-therefore establish behavior only within the evaluated synthetic
+therefore characterize behavior only within the evaluated synthetic
 setting; real-system validation remains necessary.
 
 ## Interaction Scope

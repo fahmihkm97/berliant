@@ -34,7 +34,7 @@ It evaluates whether the method avoids reporting interactions when all configura
   \texttt{streaming}.
 \end{itemize}
 
-This scenario is specifically useful for evaluating stochastic screening robustness.
+This scenario is specifically useful for evaluating stochastic screening stability.
 
 \subsubsection{PAIR-003}
 
@@ -315,7 +315,7 @@ The evaluated alternatives are:
   removal drop = 0.15.
 \end{itemize}
 
-The purpose is robustness characterization rather than post-holdout parameter optimization.
+The purpose is sensitivity characterization rather than post-holdout parameter optimization.
 
 \subsection{Scaling Study}
 
@@ -375,30 +375,6 @@ At 1,000 trials per configuration, exhaustive execution counts are:
 
 \subsection{Reproducibility}
 
-The implementation is maintained in the Berliant repository.
+The reproducibility package contains benchmark definitions, simulator implementation, discovery algorithms, automated tests, experiment scripts, aggregated result files, and publication figure-generation scripts.
 
-The frozen research milestone is identified by the Git tag:
-
-\texttt{scif-v0.0.4}
-
-The repository includes:
-
-\begin{itemize}
-\tightlist
-\item
-  benchmark definitions;
-\item
-  simulator implementation;
-\item
-  discovery algorithms;
-\item
-  automated tests;
-\item
-  experiment scripts;
-\item
-  aggregated result files; and
-\item
-  publication figure-generation scripts.
-\end{itemize}
-
-All Python development commands are executed through the project's \texttt{uv} environment.
+All Python development commands are executed through a locked \texttt{uv} environment. Repository-identifying information is omitted during anonymous review.

@@ -1,7 +1,11 @@
 import csv
 from pathlib import Path
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+mpl.rcParams["pdf.fonttype"] = 42
+mpl.rcParams["ps.fonttype"] = 42
 
 ROOT = Path("results/paper")
 FIGURES = ROOT / "figures"
@@ -105,7 +109,7 @@ for method, offset in zip(
     ax.bar_label(
         bars,
         fmt="%.0f",
-        fontsize=8,
+        fontsize=10,
         padding=2,
     )
 
@@ -118,15 +122,25 @@ ax.set_ylim(
     112,
 )
 
-ax.set_ylabel("Exact recovery (%)")
+ax.set_ylabel(
+    "Exact recovery (%)",
+    fontsize=11,
+)
 
-ax.set_xlabel("Benchmark scenario")
+ax.set_xlabel(
+    "Benchmark scenario",
+    fontsize=11,
+)
 
-ax.set_title("Exact Interaction Recovery by Discovery Method")
+ax.tick_params(
+    axis="both",
+    labelsize=10,
+)
 
 ax.legend(
     frameon=False,
     ncol=2,
+    fontsize=10,
 )
 
 ax.spines["top"].set_visible(False)
@@ -168,27 +182,30 @@ for method, offset in zip(
         label=method,
     )
 
-    ax.bar_label(
-        bars,
-        fmt="%.0f",
-        fontsize=7,
-        rotation=90,
-        padding=2,
-    )
 
 ax.set_xticks(positions)
 
 ax.set_xticklabels(scenarios)
 
-ax.set_ylabel("Mean simulator executions")
+ax.set_ylabel(
+    "Mean simulator executions",
+    fontsize=11,
+)
 
-ax.set_xlabel("Benchmark scenario")
+ax.set_xlabel(
+    "Benchmark scenario",
+    fontsize=11,
+)
 
-ax.set_title("Discovery Cost by Method")
+ax.tick_params(
+    axis="both",
+    labelsize=10,
+)
 
 ax.legend(
     frameon=False,
     ncol=2,
+    fontsize=10,
 )
 
 ax.spines["top"].set_visible(False)
@@ -232,13 +249,25 @@ ax.plot(
 
 ax.set_xticks(capabilities)
 
-ax.set_xlabel("Number of capabilities")
+ax.set_xlabel(
+    "Number of capabilities",
+    fontsize=11,
+)
 
-ax.set_ylabel("Simulator executions")
+ax.set_ylabel(
+    "Simulator executions",
+    fontsize=11,
+)
 
-ax.set_title("Scaling of Discovery Cost")
+ax.tick_params(
+    axis="both",
+    labelsize=10,
+)
 
-ax.legend(frameon=False)
+ax.legend(
+    frameon=False,
+    fontsize=10,
+)
 
 ax.spines["top"].set_visible(False)
 

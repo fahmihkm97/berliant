@@ -26,7 +26,7 @@ all configurations remain near baseline stochastic risk.
 - `streaming`.
 
 This scenario is specifically useful for evaluating stochastic
-screening robustness.
+screening stability.
 
 ### PAIR-003
 
@@ -234,7 +234,7 @@ The evaluated alternatives are:
 - removal drop = 0.05; and
 - removal drop = 0.15.
 
-The purpose is robustness characterization rather than post-holdout
+The purpose is sensitivity characterization rather than post-holdout
 parameter optimization.
 
 ## Scaling Study
@@ -276,21 +276,11 @@ At 1,000 trials per configuration, exhaustive execution counts are:
 
 ## Reproducibility
 
-The implementation is maintained in the Berliant repository.
+The reproducibility package contains benchmark definitions, simulator
+implementation, discovery algorithms, automated tests, experiment
+scripts, aggregated result files, and publication figure-generation
+scripts.
 
-The frozen research milestone is identified by the Git tag:
-
-`scif-v0.0.4`
-
-The repository includes:
-
-- benchmark definitions;
-- simulator implementation;
-- discovery algorithms;
-- automated tests;
-- experiment scripts;
-- aggregated result files; and
-- publication figure-generation scripts.
-
-All Python development commands are executed through the project's
-`uv` environment.
+All Python development commands are executed through a locked `uv`
+environment. Repository-identifying information is omitted during
+anonymous review.

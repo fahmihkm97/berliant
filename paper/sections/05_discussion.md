@@ -11,7 +11,7 @@ the ability to detect when pairwise reasoning is insufficient.
 
 ## Pairwise and Higher-Order Behavior
 
-The comparison confirms that pairwise discovery remains effective when
+The comparison indicates that pairwise discovery remains effective when
 the underlying structure is genuinely pairwise. On PAIR-002, V3
 recovered all 100 comparison seeds using fewer executions than V4
 because it terminates without residual verification.

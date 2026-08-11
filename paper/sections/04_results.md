@@ -2,7 +2,7 @@
 
 ## RQ1 — Holdout Discovery Accuracy
 
-SCIF v0.0.4 achieved near-perfect exact recovery across the unseen
+SCIF v0.0.4 achieved 99.9857% exact recovery across the unseen
 1,000-seed holdout evaluation.
 
 | Scenario | Exact Recovery | False-Positive Runs | Mean Executions |
@@ -44,7 +44,7 @@ changed after observing this holdout result.
 
 ## RQ2 — Comparison with Discovery Baselines
 
-The 100-seed comparison demonstrates that the evaluated methods differ
+The 100-seed comparison shows that the evaluated methods differ
 substantially across interaction structures.
 
 | Scenario | Method | Recovery | Mean Executions |
@@ -122,7 +122,7 @@ false-positive reporting. The frozen value of 0.10 was retained.
 SCIF obtained 20/20 exact recoveries for every tested capability count.
 Because only twenty seeds were used per size, the 95% Wilson interval
 for 20/20 recovery is approximately 83.89%--100%; these results are
-therefore robustness evidence rather than precise recovery estimates.
+therefore initial stability evidence rather than precise recovery estimates.
 
 | Capabilities | Exact Recovery | Mean SCIF V4 Executions | Exhaustive Executions | Reduction |
 |---:|---:|---:|---:|---:|

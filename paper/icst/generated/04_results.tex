@@ -2,7 +2,7 @@
 
 \subsection{RQ1 --- Holdout Discovery Accuracy}
 
-SCIF v0.0.4 achieved near-perfect exact recovery across the unseen 1,000-seed holdout evaluation.
+SCIF v0.0.4 achieved 99.9857\% exact recovery across the unseen 1,000-seed holdout evaluation.
 
 \begin{table*}[t]
 \caption{Holdout exact recovery and execution cost.}
@@ -43,7 +43,7 @@ The residual stage later observed a failure rate of 0.242 and detected unexplain
 
 \subsection{RQ2 --- Comparison with Discovery Baselines}
 
-The 100-seed comparison demonstrates that the evaluated methods differ substantially across interaction structures.
+The 100-seed comparison shows that the evaluated methods differ substantially across interaction structures.
 
 \begin{table*}[t]
 \caption{Method comparison over 100 seeds per scenario.}
@@ -117,7 +117,7 @@ The important degradation occurred when the removal threshold was reduced to 0.0
 
 \subsection{RQ5 --- Scaling Behavior}
 
-SCIF obtained 20/20 exact recoveries for every tested capability count. Because only twenty seeds were used per size, the 95\% Wilson interval for 20/20 recovery is approximately 83.89\%--100\%; these results are therefore robustness evidence rather than precise recovery estimates.
+SCIF obtained 20/20 exact recoveries for every tested capability count. Because only twenty seeds were used per size, the 95\% Wilson interval for 20/20 recovery is approximately 83.89\%--100\%; these results are therefore initial stability evidence rather than precise recovery estimates.
 
 \begin{table*}[t]
 \caption{Scaling of recovery and simulator execution cost.}

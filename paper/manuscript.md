@@ -10,7 +10,7 @@ Modern AI systems combine capabilities such as tool use, structured output, stre
 
 We present SCIF v0.0.4, a residual-risk-guided method for stochastic mixed-order interaction discovery. SCIF first screens and confirms pairwise interactions, suppresses those already supported by the data, measures the remaining empirical failure risk, and invokes higher-order localization only when substantial unexplained risk remains.
 
-Evaluation on the synthetic BSIB benchmark family produced 6,999 exact recoveries across 7,000 unseen holdout runs (99.9857%), with no observed false interaction candidates. In a 100-seed method comparison, SCIF V4 recovered all evaluated pairwise, overlapping, pure-three-way, and mixed-order structures; pairwise SCIF and deletion localization both achieved 0% exact recovery on the mixed scenario. For that eight-capability benchmark, SCIF required 22,800 mean simulator executions versus 93,000 for exhaustive order-three discovery, a 75.48% reduction.
+Evaluation on the synthetic BSIB benchmark family produced 6,999 exact recoveries across 7,000 unseen holdout runs (99.9857%), with no observed false interaction candidates. In a 100-seed method comparison, SCIF v0.0.4 recovered all evaluated pairwise, overlapping, pure-three-way, and mixed-order structures; SCIF V3 and deletion localization both achieved 0% exact recovery on the mixed scenario. For that eight-capability benchmark, SCIF required 22,800 mean simulator executions versus 93,000 for exhaustive order-three discovery, a 75.48% reduction.
 
 Ablation experiments confirmed distinct roles for residual-risk detection and higher-order localization. Across scaling experiments from eight to twenty capabilities, SCIF achieved 20/20 observed exact recoveries at each size while execution reduction reached 96.14%. These results support residual-risk-guided escalation as a promising approach for stochastic interaction discovery, while external validation beyond synthetic benchmarks remains future work.
 
@@ -232,7 +232,7 @@ We compare both exact interaction recovery and simulator execution cost on repre
 
 Ablation experiments compare pairwise discovery alone, pairwise discovery with residual-risk detection, and the complete SCIF V4 pipeline.
 
-## RQ4 — Parameter Robustness
+## RQ4 — Parameter Sensitivity
 
 **How sensitive is recovery to key sampling and localization thresholds?**
 
@@ -537,7 +537,7 @@ all configurations remain near baseline stochastic risk.
 - `streaming`.
 
 This scenario is specifically useful for evaluating stochastic
-screening robustness.
+screening stability.
 
 ### PAIR-003
 
@@ -745,7 +745,7 @@ The evaluated alternatives are:
 - removal drop = 0.05; and
 - removal drop = 0.15.
 
-The purpose is robustness characterization rather than post-holdout
+The purpose is sensitivity characterization rather than post-holdout
 parameter optimization.
 
 ## Scaling Study
@@ -787,24 +787,14 @@ At 1,000 trials per configuration, exhaustive execution counts are:
 
 ## Reproducibility
 
-The implementation is maintained in the Berliant repository.
+The reproducibility package contains benchmark definitions, simulator
+implementation, discovery algorithms, automated tests, experiment
+scripts, aggregated result files, and publication figure-generation
+scripts.
 
-The frozen research milestone is identified by the Git tag:
-
-`scif-v0.0.4`
-
-The repository includes:
-
-- benchmark definitions;
-- simulator implementation;
-- discovery algorithms;
-- automated tests;
-- experiment scripts;
-- aggregated result files; and
-- publication figure-generation scripts.
-
-All Python development commands are executed through the project's
-`uv` environment.
+All Python development commands are executed through a locked `uv`
+environment. Repository-identifying information is omitted during
+anonymous review.
 
 ---
 
@@ -817,7 +807,7 @@ All Python development commands are executed through the project's
 *Figure 1. SCIF v0.0.4 exact recovery across the seven 1,000-seed unseen holdout scenarios.*
 
 
-SCIF v0.0.4 achieved near-perfect exact recovery across the unseen
+SCIF v0.0.4 achieved 99.9857% exact recovery across the unseen
 1,000-seed holdout evaluation.
 
 **Table 1. Holdout exact recovery and execution cost.**
@@ -870,7 +860,7 @@ changed after observing this holdout result.
 *Figure 3. Mean simulator executions required by each discovery method.*
 
 
-The 100-seed comparison demonstrates that the evaluated methods differ
+The 100-seed comparison shows that the evaluated methods differ
 substantially across interaction structures.
 
 **Table 2. Method comparison over 100 seeds per scenario.**
@@ -961,7 +951,7 @@ false-positive reporting. The frozen value of 0.10 was retained.
 SCIF obtained 20/20 exact recoveries for every tested capability count.
 Because only twenty seeds were used per size, the 95% Wilson interval
 for 20/20 recovery is approximately 83.89%--100%; these results are
-therefore robustness evidence rather than precise recovery estimates.
+therefore initial stability evidence rather than precise recovery estimates.
 
 **Table 4. Scaling of recovery and simulator execution cost.**
 
@@ -1001,7 +991,7 @@ the ability to detect when pairwise reasoning is insufficient.
 
 ## Pairwise and Higher-Order Behavior
 
-The comparison confirms that pairwise discovery remains effective when
+The comparison indicates that pairwise discovery remains effective when
 the underlying structure is genuinely pairwise. On PAIR-002, V3
 recovered all 100 comparison seeds using fewer executions than V4
 because it terminates without residual verification.
@@ -1078,7 +1068,7 @@ BSIB provides controlled stochastic behavior and exact hidden ground
 truth but cannot reproduce the full complexity of production AI
 systems, including state dependence, non-stationarity, continuous
 parameters, semantic failures, and environmental effects. The results
-therefore establish behavior only within the evaluated synthetic
+therefore characterize behavior only within the evaluated synthetic
 setting; real-system validation remains necessary.
 
 ## Interaction Scope
