@@ -51,6 +51,7 @@ jobs:
       - name: Verify release checksums
         run: |
           cd dist
+          sed -i 's#dist/##g' SHA256SUMS
           sha256sum -c SHA256SUMS
           rm SHA256SUMS
 
