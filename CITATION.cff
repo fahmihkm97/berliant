@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "Berliant: Discovering Stochastic Failure-Inducing Capability Interactions"
+message: "If you use Berliant in academic work, please cite this software."
+type: software
+authors:
+  - family-names: "hkm97"
+    given-names: "fahmi"
+version: "0.1.0"
+date-released: "2026-08-12"
+repository-code: "https://github.com/fahmihkm97/berliant"
+license: "Apache-2.0"
