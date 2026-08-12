@@ -1,5 +1,10 @@
 # Berliant
 
+[![PyPI version](https://img.shields.io/pypi/v/berliant.svg)](https://pypi.org/project/berliant/)
+[![Python versions](https://img.shields.io/pypi/pyversions/berliant.svg)](https://pypi.org/project/berliant/)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Downloads](https://static.pepy.tech/badge/berliant)](https://pepy.tech/project/berliant)
+
 Berliant is a Python library for discovering stochastic failure-inducing capability interactions.
 
 ## Status
